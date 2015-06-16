@@ -1,13 +1,17 @@
 source 'https://rubygems.org'
 ruby '2.2.0'
-#ruby-gemset=median
+#ruby-gemset=social_circle
 
 gem 'bitters'
 gem 'coffee-rails', '~> 4.1.0'
 gem 'haml-rails'
 gem 'jbuilder', '~> 2.0'
 gem 'jquery-rails'
+gem 'bootstrap-will_paginate'
+gem 'bootstrap-sass'
+gem 'turbolinks'
 gem 'neat'
+gem 'figaro'
 gem 'pg'
 gem 'rails', '4.2.1'
 gem 'redcarpet'
@@ -15,6 +19,10 @@ gem 'sass-rails', '~> 5.0'
 gem 'simple_form'
 gem 'sorcery'
 gem 'uglifier', '>= 1.3.0'
+gem 'fog'
+gem 'fog-aws'
+gem 'carrierwave'
+gem 'mini_magick'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

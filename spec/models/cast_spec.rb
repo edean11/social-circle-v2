@@ -1,5 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe Cast, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+
+  describe "validations" do
+    it { should belong_to :user }
+    it { should validate_presence_of(:user_id) }
+    it { should validate_presence_of(:title) }
+    it { should validate_presence_of(:content) }
+  end
 end
