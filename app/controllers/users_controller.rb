@@ -1,7 +1,22 @@
 class UsersController < ApplicationController
 
+  before_action :require_login, except: [:index, :new, :create]
+
   def index
     @users = User.all
+    respond_to do |format|
+      format.html { render 'index'}
+      format.json { render json: @users}
+    end
+  end
+
+  def show
+    @user = User.find(params[:id])
+    @myCasts = @user.casts
+    respond_to do |format|
+      format.html { render 'show'}
+      format.json { render json: @user}
+    end
   end
 
   def new
@@ -14,7 +29,7 @@ class UsersController < ApplicationController
       auto_login(@user)
       uploader = AvatarUploader.new
       uploader.store!(@user.avatar)
-      redirect_to root_url, :notice => "Welcome, #{@user.name}"
+      redirect_to user_path(@user), :notice => "Welcome, #{@user.name}"
     else
       flash.alert = "Please fix the errors below to continue."
       render :new

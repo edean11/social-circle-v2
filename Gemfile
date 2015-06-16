@@ -23,9 +23,6 @@ gem 'fog'
 gem 'fog-aws'
 gem 'carrierwave'
 gem 'mini_magick'
-gem 'lodash-rails'
-gem 'underscore-rails'
-gem 'gmaps4rails'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
