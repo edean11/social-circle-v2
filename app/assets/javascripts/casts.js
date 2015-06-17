@@ -21,7 +21,7 @@ function initialize() {
       position: position,
       map: map,
       draggable: true,
-      animation: 'BOUNCE'
+      animation: google.maps.Animation.BOUNCE
     });
     map.panTo(position);
     setLatLng(position);

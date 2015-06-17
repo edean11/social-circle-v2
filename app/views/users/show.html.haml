@@ -2,12 +2,32 @@
 :javascript
     function initialize() {
       if(!($('#map').length)){return}
-      //main map
+
+      //holder variables
       var infoWindows = [];
-      function populateMarker(position,map,infowindow) {
+      //Color and shadow for markers
+      function createIconAndShadow(pinColor){
+          var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
+            new google.maps.Size(21, 34),
+            new google.maps.Point(0,0),
+            new google.maps.Point(10, 34));
+          var pinShadow = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_shadow",
+            new google.maps.Size(40, 37),
+            new google.maps.Point(0, 0),
+            new google.maps.Point(12, 35));
+          return [pinImage,pinShadow];
+      }
+
+      //marker functions
+      function populateMarker(position,map,infowindow,title,color) {
+        var iconAndShadow = createIconAndShadow(color);
+        var pinImage = iconAndShadow[0];
+        var pinShadow = iconAndShadow[1];
         var marker = new google.maps.Marker({
           position: position,
-          map: map
+          map: map,
+          icon: pinImage,
+          shadow: pinShadow
         });
         map.panTo(position);
         google.maps.event.addListener(marker, 'click', function() {
@@ -15,17 +35,40 @@
           infowindow.open(map,marker);
         });
       }
-      $('.castPopup').parent().parent().click(function(){
-        closeAllInfoWindows();
-      })
       function closeAllInfoWindows() {
           for (var i=0;i<infoWindows.length;i++) {
              infoWindows[i].close();
           }
         }
+
+      function findDaysLeft(expiration){
+        var now = new Date();
+        var exp = Date.parse(expiration);
+        var daysleft = ((exp - now)/1000)*(1/86400);
+        return daysleft;
+      }
+
+      function findMarkerColor(expiration){
+        var daysleft = findDaysLeft(expiration);
+        var color;
+        if(daysleft<0.05){
+            color = 'FA334F'
+        }else if(daysleft<1){
+            color = 'FFD700'
+        }else if(daysleft<7){
+            color = '96D72D'
+        }else if(daysleft<30){
+            color = '323299'
+        }else if(daysleft<365){
+            color = '70018B'
+        }
+        return color;
+      }
+
+      //JSON Call
       $.getJSON( "#{user_path(@user)}", function( data ) {
           var lastCast = data[data.length-1];
-          console.log(lastCast.lat,lastCast.lon);
+          //load map and map options
           var mapOptions = {
             center: { lat: parseFloat(lastCast.lat), lng: parseFloat(lastCast.lon)},
             zoom: 8,
@@ -33,10 +76,11 @@
           };
           var map = new google.maps.Map(document.getElementById('map'),
             mapOptions);
+          //loop through all owned markers and append
           $.each(data,function(index,cast){
-            //populate each marker
+            //determine latLng
             var latLng = new google.maps.LatLng(cast.lat,cast.lon);
-            //add event listener to each marker
+            //add content to each infowindow
             var contentString = '<div class="castPopup '+cast.id+'Popup">'+
                     '<p class=castTitle '+cast.id+'Title>'+cast.title+'</p>'+
                     '<p class=castContent '+cast.id+'Content>'+cast.content+'</p>'+
@@ -44,8 +88,11 @@
             var infowindow = new google.maps.InfoWindow({
                 content: contentString
             });
+            //populate variable array for reference
             infoWindows.push(infowindow);
-            populateMarker(latLng,map,infowindow);
+            //attach markers and info windows to map
+            var color = findMarkerColor(cast.expiration);
+            populateMarker(latLng,map,infowindow,cast.title,color);
           });
       })
     }
