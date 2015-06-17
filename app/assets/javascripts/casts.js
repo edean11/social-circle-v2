@@ -15,6 +15,7 @@ function initialize() {
     zoom: 10,
     disableDefaultUI: true
   };
+  var image = 'images/beachflag.png';
   function placeMarker(position, map) {
     $('#setChosenLocation').removeClass('hidden');
     var marker = new google.maps.Marker({
@@ -35,6 +36,4 @@ function initialize() {
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
-$('.new-cast-button').click(function(){
-  initialize();
-})
+//initialize();

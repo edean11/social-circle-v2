@@ -22,6 +22,7 @@ class CastsController < ApplicationController
   end
 
   def destroy
+    Cast.find(params[:id]).destroy
   end
 
   protected
