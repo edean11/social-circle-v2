@@ -1,5 +1,7 @@
 class User < ActiveRecord::Base
   has_many :casts, dependent: :destroy
+  has_many :subscriptions
+  has_many :groups, through: :subscriptions
   authenticates_with_sorcery!
   mount_uploader :avatar, AvatarUploader
 
