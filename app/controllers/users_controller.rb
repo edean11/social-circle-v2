@@ -38,6 +38,17 @@ class UsersController < ApplicationController
 
   protected
 
+  def load_user
+    if params[:id].present?
+      @user = User.find(params[:id])
+    else
+      @user = User.new
+    end
+    if params[:user].present?
+      @user.assign_attributes(user_params)
+    end
+  end
+
   def user_params
     params.require(:user).permit(:name, :email, :default_zip, :password, :password_confirmation, :avatar)
   end

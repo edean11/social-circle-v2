@@ -3,14 +3,26 @@
     function initialize() {
       if(!($('#map').length)){return}
       //main map
-      function populateMarkers(position,map) {
+      var infoWindows = [];
+      function populateMarker(position,map,infowindow) {
         var marker = new google.maps.Marker({
           position: position,
-          map: map,
-          draggable: true
+          map: map
         });
         map.panTo(position);
+        google.maps.event.addListener(marker, 'click', function() {
+          closeAllInfoWindows();
+          infowindow.open(map,marker);
+        });
       }
+      $('.castPopup').parent().parent().click(function(){
+        closeAllInfoWindows();
+      })
+      function closeAllInfoWindows() {
+          for (var i=0;i<infoWindows.length;i++) {
+             infoWindows[i].close();
+          }
+        }
       $.getJSON( "#{user_path(@user)}", function( data ) {
           var lastCast = data[data.length-1];
           console.log(lastCast.lat,lastCast.lon);
@@ -22,8 +34,18 @@
           var map = new google.maps.Map(document.getElementById('map'),
             mapOptions);
           $.each(data,function(index,cast){
+            //populate each marker
             var latLng = new google.maps.LatLng(cast.lat,cast.lon);
-            populateMarkers(latLng,map);
+            //add event listener to each marker
+            var contentString = '<div class="castPopup '+cast.id+'Popup">'+
+                    '<p class=castTitle '+cast.id+'Title>'+cast.title+'</p>'+
+                    '<p class=castContent '+cast.id+'Content>'+cast.content+'</p>'+
+                    '</div>'
+            var infowindow = new google.maps.InfoWindow({
+                content: contentString
+            });
+            infoWindows.push(infowindow);
+            populateMarker(latLng,map,infowindow);
           });
       })
     }

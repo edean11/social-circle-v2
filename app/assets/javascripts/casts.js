@@ -20,7 +20,8 @@ function initialize() {
     var marker = new google.maps.Marker({
       position: position,
       map: map,
-      draggable: true
+      draggable: true,
+      animation: 'BOUNCE'
     });
     map.panTo(position);
     setLatLng(position);
