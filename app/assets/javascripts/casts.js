@@ -3,6 +3,13 @@ function initialize() {
 
   if(!($('#placeCastMap').length)){return}
 
+  var markers = [];
+
+  //create jquery-ui datetime picker
+  $('.datetimePicker').datetimepicker({
+    // inline:true
+  });
+
   //set hidden field values for rails
   function setLatLng(position){
     $('#cast_lat').val(position.A);
@@ -15,15 +22,22 @@ function initialize() {
     zoom: 10,
     disableDefaultUI: true
   };
-  var image = 'images/beachflag.png';
   function placeMarker(position, map) {
     $('#setChosenLocation').removeClass('hidden');
+    if(markers.length>0){
+      for(i=0;i<markers.length;i++){
+        markers[i].setMap(null);
+        markers[i] = null;
+        markers = [];
+      }
+    }
     var marker = new google.maps.Marker({
       position: position,
       map: map,
       draggable: true,
-      animation: google.maps.Animation.BOUNCE
+      animation: google.maps.Animation.DROP
     });
+    markers.push(marker);
     map.panTo(position);
     setLatLng(position);
   }

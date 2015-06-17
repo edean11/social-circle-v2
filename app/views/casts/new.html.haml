@@ -4,7 +4,7 @@
 = simple_form_for @cast, :html => {:multipart => true} do |f|
   = f.input :title
   = f.input :content
-  = f.input :expiration, as: :datetime
+  = f.input :expiration, as: :string, :input_html => {:class => 'datetimePicker'}
   = f.input :lat, :as => :hidden
   = f.input :lon, :as => :hidden
   - if @cast.valid?
