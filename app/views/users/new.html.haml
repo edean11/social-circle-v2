@@ -4,8 +4,8 @@
 = simple_form_for @user, :html => {:multipart => true} do |f|
   = f.input :name
   = f.input :email
+  = f.input :default_zip
   = f.file_field :avatar, label: "Upload Your User Avatar"
-  = image_tag(@user.avatar) if @user.avatar?
   = f.input :password
   = f.input :password_confirmation
   = f.button :submit, "Sign Up"

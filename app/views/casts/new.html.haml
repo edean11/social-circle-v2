@@ -1,0 +1,16 @@
+- content_for(:page_title) do
+  %h1 New Cast
+
+= simple_form_for @cast, :html => {:multipart => true} do |f|
+  = f.input :title
+  = f.input :content
+  = f.input :expiration, as: :datetime
+  = f.input :lat, :as => :hidden
+  = f.input :lon, :as => :hidden
+  - if @cast.valid?
+    = f.button :submit, "Cast Message"
+  - else
+    %p Choose a Location for this message by clicking somewhere on the map below and clicking 'Set Chosen Location' or clicking 'Set Current Location'
+    %button#setCurrentLocation Set Current Location
+    #placeCastMap
+    %button#setChosenLocation.hidden Set Chosen Location

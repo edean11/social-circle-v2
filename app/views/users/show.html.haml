@@ -1,0 +1,111 @@
+%p= link_to "New Cast", new_cast_path, class: "btn btn-inverse new-cast-button"
+:javascript
+    function initialize() {
+      if(!($('#map').length)){return}
+
+      //Holder variables
+      var infoWindows = [];
+      //Create marker icon
+      function createIcon(pinColor){
+          var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
+            new google.maps.Size(21, 34),
+            new google.maps.Point(0,0),
+            new google.maps.Point(10, 34));
+          return pinImage;
+      }
+
+      //Marker functions
+      function populateMarker(position,map,infowindow,title,color) {
+        var pinImage = createIcon(color);
+        var marker = new google.maps.Marker({
+          position: position,
+          map: map,
+          icon: pinImage
+        });
+        map.panTo(position);
+        google.maps.event.addListener(marker, 'click', function() {
+          closeAllInfoWindows();
+          infowindow.open(map,marker);
+        });
+      }
+      function deleteMarker(cast_id){
+        $.ajax({
+          url: "/casts/" + cast_id,
+          type: "post",
+          dataType: "json",
+          data: {"_method":"delete"}
+        });
+      }
+      function closeAllInfoWindows() {
+          for (var i=0;i<infoWindows.length;i++) {
+             infoWindows[i].close();
+          }
+        }
+
+      function findDaysLeft(expiration){
+        var now = new Date();
+        var exp = Date.parse(expiration);
+        console.log(exp)
+        var daysleft = ((exp - now)/1000)*(1/86400);
+        return daysleft;
+      }
+
+      function findMarkerColor(expiration){
+        var daysleft = findDaysLeft(expiration);
+        var color;
+        if(daysleft<0){
+            color = 'expired'
+        }else if(daysleft<0.05){
+            color = 'FA334F'
+        }else if(daysleft<1){
+            color = 'FFD700'
+        }else if(daysleft<7){
+            color = '96D72D'
+        }else if(daysleft<30){
+            color = '323299'
+        }else if(daysleft<365){
+            color = '70018B'
+        }
+        return color;
+      }
+
+      //JSON Call
+      $.getJSON( "#{user_path(@user)}", function( data ) {
+          var lastCast = data[data.length-1];
+          //load map and map options
+          var mapOptions = {
+            center: { lat: parseFloat(lastCast.lat), lng: parseFloat(lastCast.lon)},
+            zoom: 8,
+            disableDefaultUI: true
+          };
+          var map = new google.maps.Map(document.getElementById('map'),
+            mapOptions);
+          //loop through all owned markers and append
+          $.each(data,function(index,cast){
+            //determine latLng
+            var latLng = new google.maps.LatLng(cast.lat,cast.lon);
+            //add content to each infowindow
+            var contentString = '<div class="castPopup '+cast.id+'Popup">'+
+                    '<p class=castTitle '+cast.id+'Title>'+cast.title+'</p>'+
+                    '<p class=castContent '+cast.id+'Content>'+cast.content+'</p>'+
+                    "<p class=castExpiration "+cast.id+"Expiration>"+parseFloat(findDaysLeft(cast.expiration)).toFixed(2)+" Days Left</p>"
+                    '</div>'
+            var infowindow = new google.maps.InfoWindow({
+                content: contentString
+            });
+            //populate variable array for reference
+            infoWindows.push(infowindow);
+            //attach markers and info windows to map
+            var color = findMarkerColor(cast.expiration);
+            if(color==='expired'){
+                deleteMarker(cast.id);
+            }else{
+                populateMarker(latLng,map,infowindow,cast.title,color);
+            }
+          });
+      })
+    }
+    google.maps.event.addDomListener(window, 'load', initialize);
+%h2 Social Circle #{@user.name}
+%div
+    #map
