@@ -34,7 +34,6 @@ function initialize() {
     var marker = new google.maps.Marker({
       position: position,
       map: map,
-      draggable: true,
       animation: google.maps.Animation.DROP
     });
     markers.push(marker);
