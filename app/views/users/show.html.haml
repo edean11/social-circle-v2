@@ -1,4 +1,33 @@
-%p= link_to "New Cast", new_cast_path
+%p= link_to "New Cast", new_cast_path, class: "btn btn-inverse new-cast-button"
+:javascript
+    function initialize() {
+      if(!($('#map').length)){return}
+      //main map
+      function populateMarkers(position,map) {
+        var marker = new google.maps.Marker({
+          position: position,
+          map: map,
+          draggable: true
+        });
+        map.panTo(position);
+      }
+      $.getJSON( "#{user_path(@user)}", function( data ) {
+          var lastCast = data[data.length-1];
+          console.log(lastCast.lat,lastCast.lon);
+          var mapOptions = {
+            center: { lat: parseFloat(lastCast.lat), lng: parseFloat(lastCast.lon)},
+            zoom: 8,
+            disableDefaultUI: true
+          };
+          var map = new google.maps.Map(document.getElementById('map'),
+            mapOptions);
+          $.each(data,function(index,cast){
+            var latLng = new google.maps.LatLng(cast.lat,cast.lon);
+            populateMarkers(latLng,map);
+          });
+      })
+    }
+    google.maps.event.addDomListener(window, 'load', initialize);
 %h2 Social Circle #{@user.name}
 %div
     #map
