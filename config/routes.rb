@@ -4,6 +4,7 @@ Rails.application.routes.draw do
 
   resource :user_session, only: [:new, :create, :destroy]
   resources :users, only: [:new, :create, :show]
+  resources :casts, only: [:new, :create, :destroy]
   resources :users, only: [:index, :show], format: "json"
   resources :casts, :only => :index, format: "json"
 

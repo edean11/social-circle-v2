@@ -15,7 +15,7 @@ class UsersController < ApplicationController
     @myCasts = @user.casts
     respond_to do |format|
       format.html { render 'show'}
-      format.json { render json: @user}
+      format.json { render json: @myCasts}
     end
   end
 
@@ -39,7 +39,7 @@ class UsersController < ApplicationController
   protected
 
   def user_params
-    params.require(:user).permit(:name, :email, :password, :password_confirmation, :avatar)
+    params.require(:user).permit(:name, :email, :default_zip, :password, :password_confirmation, :avatar)
   end
 
 end
