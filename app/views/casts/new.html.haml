@@ -7,10 +7,11 @@
   = f.input :expiration, as: :string, :input_html => {:class => 'datetimePicker'}
   = f.input :lat, :as => :hidden
   = f.input :lon, :as => :hidden
+  = f.association :groups, as: :check_boxes
   - if @cast.valid?
     = f.button :submit, "Cast Message"
   - else
-    %p Choose a Location for this message by clicking somewhere on the map below and clicking 'Set Chosen Location' or clicking 'Set Current Location'
+    %p Choose a Location for this message by clicking somewhere on the map below or clicking 'Set Current Location'
     %button#setCurrentLocation Set Current Location
     #placeCastMap
     %button#setChosenLocation.hidden Set Chosen Location

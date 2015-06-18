@@ -1,4 +1,5 @@
 %p= link_to "New Cast", new_cast_path, class: "btn btn-inverse new-cast-button"
+%p= link_to "New Group", new_group_path, class: "btn btn-inverse new-group-button"
 :javascript
     function initialize() {
       if(!($('#map').length)){return}
@@ -70,7 +71,7 @@
       }
 
       //JSON Call
-      $.getJSON( "#{user_path(@user)}", function( data ) {
+      $.getJSON( "#{user_casts_path(@user)}", function( data ) {
           var lastCast = data[data.length-1];
           //load map and map options
           var mapOptions = {

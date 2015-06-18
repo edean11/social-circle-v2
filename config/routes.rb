@@ -5,8 +5,14 @@ Rails.application.routes.draw do
   resource :user_session, only: [:new, :create, :destroy]
   resources :users, only: [:new, :create, :show]
   resources :casts, only: [:new, :create, :destroy]
-  resources :users, only: [:index, :show], format: "json"
+  resources :groups, only: [:new, :create, :destroy]
+  resources :users, :only => :index, format: "json"
   resources :casts, :only => :index, format: "json"
+  resources :groups, :only => :index, format: "json"
+  resources :users do
+    resources :casts, :only => :index, format: "json"
+    resources :groups, :only => :index, format: "json"
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

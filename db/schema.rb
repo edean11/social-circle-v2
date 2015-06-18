@@ -11,10 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150617184119) do
+ActiveRecord::Schema.define(version: 20150618015400) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "castgroups", force: :cascade do |t|
+    t.integer  "cast_id"
+    t.integer  "group_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "castgroups", ["cast_id"], name: "index_castgroups_on_cast_id", using: :btree
+  add_index "castgroups", ["group_id"], name: "index_castgroups_on_group_id", using: :btree
 
   create_table "casts", force: :cascade do |t|
     t.text     "title"
@@ -69,6 +79,8 @@ ActiveRecord::Schema.define(version: 20150617184119) do
   add_index "users", ["remember_me_token"], name: "index_users_on_remember_me_token", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", using: :btree
 
+  add_foreign_key "castgroups", "casts"
+  add_foreign_key "castgroups", "groups"
   add_foreign_key "casts", "users"
   add_foreign_key "subscriptions", "groups"
   add_foreign_key "subscriptions", "users"
