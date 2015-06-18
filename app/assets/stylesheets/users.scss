@@ -5,3 +5,14 @@
     width: 800px;
     height: 600px;
 }
+
+.groupsContainer{
+    padding: 50px;
+    .groupContainer {
+        width: 100px;
+        height: 100px;
+        border: 2px solid black;
+        border-radius: 5px;
+        padding: 20px;
+    }
+}

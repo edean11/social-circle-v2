@@ -3,6 +3,9 @@ class CastsController < ApplicationController
     if params[:user_id]
       @user = User.find(params[:user_id])
       @casts = @user.casts
+    elsif params[:group_id]
+      @group = Group.find(params[:group_id])
+      @casts = @group.casts
     else
       @casts = Cast.all
     end

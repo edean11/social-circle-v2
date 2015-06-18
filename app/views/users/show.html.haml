@@ -1,22 +1,23 @@
 %p= link_to "New Cast", new_cast_path, class: "btn btn-inverse new-cast-button"
 %p= link_to "New Group", new_group_path, class: "btn btn-inverse new-group-button"
 :javascript
-    function initialize() {
-      if(!($('#map').length)){return}
 
-      //Holder variables
-      var infoWindows = [];
-      //Create marker icon
-      function createIcon(pinColor){
-          var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
-            new google.maps.Size(21, 34),
-            new google.maps.Point(0,0),
-            new google.maps.Point(10, 34));
-          return pinImage;
-      }
+    //Holder variables
+    var markers = [];
+    var infoWindows = [];
+    var mapArr = [];
 
-      //Marker functions
-      function populateMarker(position,map,infowindow,title,color) {
+    //Create marker icon
+    function createIcon(pinColor){
+        var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
+        new google.maps.Size(21, 34),
+        new google.maps.Point(0,0),
+        new google.maps.Point(10, 34));
+        return pinImage;
+    }
+
+    //Marker functions
+    function populateMarker(position,map,infowindow,title,color) {
         var pinImage = createIcon(color);
         var marker = new google.maps.Marker({
           position: position,
@@ -28,30 +29,37 @@
           closeAllInfoWindows();
           infowindow.open(map,marker);
         });
-      }
-      function deleteMarker(cast_id){
+        markers.push(marker);
+    }
+    function deleteMarker(cast_id){
         $.ajax({
           url: "/casts/" + cast_id,
           type: "post",
           dataType: "json",
           data: {"_method":"delete"}
         });
-      }
-      function closeAllInfoWindows() {
-          for (var i=0;i<infoWindows.length;i++) {
-             infoWindows[i].close();
-          }
+    }
+    function removeAllMarkersFromMap(){
+        for(var i=0;i<markers.length;i++){
+            markers[i].setMap(null);
+            markers[i] = null;
         }
+        markers = [];
+    }
+    function closeAllInfoWindows() {
+        for (var i=0;i<infoWindows.length;i++) {
+          infoWindows[i].close();
+        }
+    }
 
-      function findDaysLeft(expiration){
+    function findDaysLeft(expiration){
         var now = new Date();
         var exp = Date.parse(expiration);
-        console.log(exp)
         var daysleft = ((exp - now)/1000)*(1/86400);
         return daysleft;
-      }
+    }
 
-      function findMarkerColor(expiration){
+    function findMarkerColor(expiration){
         var daysleft = findDaysLeft(expiration);
         var color;
         if(daysleft<0){
@@ -68,19 +76,12 @@
             color = '70018B'
         }
         return color;
-      }
+    }
 
-      //JSON Call
-      $.getJSON( "#{user_casts_path(@user)}", function( data ) {
+    function populateMarkers(path,map){
+        $.getJSON(path,function(data) {
+          removeAllMarkersFromMap();
           var lastCast = data[data.length-1];
-          //load map and map options
-          var mapOptions = {
-            center: { lat: parseFloat(lastCast.lat), lng: parseFloat(lastCast.lon)},
-            zoom: 8,
-            disableDefaultUI: true
-          };
-          var map = new google.maps.Map(document.getElementById('map'),
-            mapOptions);
           //loop through all owned markers and append
           $.each(data,function(index,cast){
             //determine latLng
@@ -106,7 +107,40 @@
           });
       })
     }
+
+    function populateSubscribedGroups(){
+        $.getJSON("#{user_groups_path(@user)}",function(data) {
+            $.each(data,function(index,group){
+                var elem = $('<div class="groupContainer" data-uuid="'+group.id+'"><p class="groupName">'+
+                group.name+'</p></div>')
+                $('.groupsContainer').append(elem);
+            });
+        });
+    }
+
+    function initialize() {
+      if(!($('#map').length)){return}
+      //load map and map options
+      var mapOptions = {
+        center: { lat: parseFloat("#{@user.casts.last.lat}"), lng: parseFloat("#{@user.casts.last.lon}")},
+        zoom: 8,
+        disableDefaultUI: true
+      };
+      var map = new google.maps.Map(document.getElementById('map'),
+        mapOptions);
+      mapArr.push(map);
+      populateMarkers("#{user_casts_path(@user)}",map)
+      populateSubscribedGroups();
+      $('.groupsContainer').click('.groupContainer',function(e){
+        if($(e.target).attr('data-uuid')){
+            populateMarkers("#{root_url}/groups/"+$(e.target).attr('data-uuid')+"/casts.json",mapArr[0]);
+        }
+      })
+    }
     google.maps.event.addDomListener(window, 'load', initialize);
 %h2 Social Circle #{@user.name}
 %div
     #map
+.groupsContainer
+
+
