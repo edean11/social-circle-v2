@@ -7,6 +7,8 @@
     var markers = [];
     var infoWindows = [];
     var mapArr = [];
+    var userName = "#{@user.name}"
+    var userId = "#{@user.id}"
 
     //Create marker icon
     function createIcon(pinColor){
@@ -111,6 +113,9 @@
     }
 
     function populateSubscribedGroups(){
+        var myCastsElem = $('<div class="groupContainer" data-uuid="'+userId+'"><p class="groupName">'+
+                "#{@user.name}"+'</p></div>')
+        $('.groupsContainer').append(myCastsElem);
         $.getJSON("#{user_groups_path(@user)}",function(data) {
             $.each(data,function(index,group){
                 var elem = $('<div class="groupContainer" data-uuid="'+group.id+'"><p class="groupName">'+
@@ -136,8 +141,13 @@
       $('.groupsContainer').click('.groupContainer',function(e){
         if($(e.target).attr('data-uuid')){
             var groupName = $(e.target).children()[0].innerHTML;
-            $('#circleHeader').text(groupName+" Circle");
-            populateMarkers("#{root_url}/groups/"+$(e.target).attr('data-uuid')+"/casts.json",mapArr[0]);
+            if(groupName===userName){
+                $('#circleHeader').text(groupName+"'s Circle");
+                populateMarkers("#{root_url}/users/"+$(e.target).attr('data-uuid')+"/casts.json",mapArr[0]);
+            }else{
+                $('#circleHeader').text(groupName+" Circle");
+                populateMarkers("#{root_url}/groups/"+$(e.target).attr('data-uuid')+"/casts.json",mapArr[0]);
+            }
         }
       })
     }
