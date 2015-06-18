@@ -1,0 +1,7 @@
+- content_for(:page_title) do
+  %h1 New Subscription
+
+= simple_form_for @subscription, :html => {:multipart => true} do |f|
+  = f.simple_fields_for :groups do |ff|
+    = ff.input :group_id, collection: Group.all, as: :check_boxes
+  = f.button :submit, "Subscribe"

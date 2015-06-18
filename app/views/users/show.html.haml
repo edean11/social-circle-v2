@@ -1,5 +1,6 @@
 %p= link_to "New Cast", new_cast_path, class: "btn btn-inverse new-cast-button"
 %p= link_to "New Group", new_group_path, class: "btn btn-inverse new-group-button"
+%p= link_to "New Subscription", new_subscription_path, class: "btn btn-inverse new-group-button"
 :javascript
 
     //Holder variables
@@ -22,7 +23,8 @@
         var marker = new google.maps.Marker({
           position: position,
           map: map,
-          icon: pinImage
+          icon: pinImage,
+          animation: google.maps.Animation.DROP
         });
         map.panTo(position);
         google.maps.event.addListener(marker, 'click', function() {
@@ -120,9 +122,9 @@
 
     function initialize() {
       if(!($('#map').length)){return}
-      //load map and map options
+      //insert rails variables here
       var mapOptions = {
-        center: { lat: parseFloat("#{@user.casts.last.lat}"), lng: parseFloat("#{@user.casts.last.lon}")},
+        center: { lat: parseFloat(-25.363882), lng: parseFloat(131.044922)},
         zoom: 8,
         disableDefaultUI: true
       };
@@ -133,12 +135,16 @@
       populateSubscribedGroups();
       $('.groupsContainer').click('.groupContainer',function(e){
         if($(e.target).attr('data-uuid')){
+            var groupName = $(e.target).children()[0].innerHTML;
+            $('#circleHeader').text(groupName+" Circle");
             populateMarkers("#{root_url}/groups/"+$(e.target).attr('data-uuid')+"/casts.json",mapArr[0]);
         }
       })
     }
     google.maps.event.addDomListener(window, 'load', initialize);
-%h2 Social Circle #{@user.name}
+
+
+%h2#circleHeader #{@user.name}'s Circle
 %div
     #map
 .groupsContainer

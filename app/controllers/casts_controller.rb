@@ -29,7 +29,6 @@ class CastsController < ApplicationController
           Castgroup.create(:cast_id => @cast.id, :group_id => @group.id)
         end
       end
-      binding.pry
       message = "Cast Created Successfully!"
       redirect_to user_path(current_user), notice: message
     else

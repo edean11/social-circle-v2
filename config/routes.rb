@@ -1,19 +1,24 @@
 Rails.application.routes.draw do
 
+  get 'subscriptions/new'
+
+  get 'subscriptions/create'
+
+  get 'subscriptions/destroy'
+
   root 'users#index'
 
   resource :user_session, only: [:new, :create, :destroy]
-  resources :users, only: [:new, :create, :show]
-  resources :casts, only: [:new, :create, :destroy]
-  resources :groups, only: [:new, :create, :destroy]
-  resources :users, :only => :index, format: "json"
-  resources :casts, :only => :index, format: "json"
-  resources :groups, :only => :index, format: "json"
-  resources :users do
+  resources :users, only: [:new, :create, :show] do
     resources :casts, :only => :index, format: "json"
     resources :groups, :only => :index, format: "json"
   end
-  resources :groups do
+  resources :casts, only: [:new, :create, :destroy]
+  resources :groups, only: [:new, :create, :destroy]
+  resources :subscriptions, only: [:new, :create, :destroy]
+  resources :users, :only => :index, format: "json"
+  resources :casts, :only => :index, format: "json"
+  resources :groups, :only => :index, format: "json" do
     resources :casts, :only => :index, format: "json"
   end
 
