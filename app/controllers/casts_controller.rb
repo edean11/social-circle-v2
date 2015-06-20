@@ -14,6 +14,15 @@ class CastsController < ApplicationController
     end
   end
 
+  def show
+    @cast = Cast.find(params[:id])
+    respond_to do |format|
+      format.json do
+        render :json => @cast.to_json(:include => { :user => { only: [:name,:id] } })
+      end
+    end
+  end
+
   def new
     @cast = Cast.new
     @groups = Group.all

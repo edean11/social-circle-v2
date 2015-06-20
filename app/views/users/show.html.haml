@@ -1,6 +1,22 @@
 %p= link_to "New Cast", new_cast_path, class: "btn btn-inverse new-cast-button"
 %p= link_to "New Group", new_group_path, class: "btn btn-inverse new-group-button"
 %p= link_to "New Subscription", new_subscription_path, class: "btn btn-inverse new-group-button"
+
+
+%h2#circleHeader #{@user.name}'s Circle
+%div
+    #map
+.groupsContainer
+.commentArea.hidden
+    %button#closeComments Close
+    .commentsContainer
+        .castCommentsHeader
+        .castComments
+    .commentInputContainer
+        %input#commentInput
+        %button#submitComment Submit
+
+
 :javascript
 
     //Holder variables
@@ -9,6 +25,7 @@
     var mapArr = [];
     var userName = "#{@user.name}"
     var userId = "#{@user.id}"
+    var openCastId = [];
 
     //Create marker icon
     function createIcon(pinColor){
@@ -20,7 +37,7 @@
     }
 
     //Marker functions
-    function populateMarker(position,map,infowindow,title,color) {
+    function populateMarker(position,map,infowindow,cast_id,color) {
         var pinImage = createIcon(color);
         var marker = new google.maps.Marker({
           position: position,
@@ -28,10 +45,12 @@
           icon: pinImage,
           animation: google.maps.Animation.DROP
         });
+        marker.set("id", cast_id);
         map.panTo(position);
-        google.maps.event.addListener(marker, 'click', function() {
+        google.maps.event.addListener(marker, 'click', function(e) {
           closeAllInfoWindows();
           infowindow.open(map,marker);
+          showComments(marker.id);
         });
         markers.push(marker);
     }
@@ -59,7 +78,7 @@
     function findDaysLeft(expiration){
         var now = new Date();
         var exp = Date.parse(expiration);
-        var daysleft = ((exp - now)/1000)*(1/86400);
+        var daysleft = parseFloat(((exp - now)/1000)*(1/86400)).toFixed(2);
         return daysleft;
     }
 
@@ -82,6 +101,76 @@
         return color;
     }
 
+    function populateComments(path,is_parent){
+        $.getJSON(path,function(data){
+            if(is_parent){
+                var elem = $('<div class="castComment" data-uuid="'+data.id+'">'+
+                        '<p class="castCommentParentHeader">'+data.title+'</p>'+
+                        '<p class="castCommentParentContent">'+data.content+'</p>'+
+                        '<p class="castCommentParentUser">'+data.user.name+'</p>'+
+                        '<p class="castCommentParentExpiration">'+findDaysLeft(data.expiration)+
+                            ' Days Remaining</p>'+
+                        '</div>');
+                $('.commentsContainer').append(elem);
+            }else{
+                if(Object.keys(data).length>0){
+                    console.log(data);
+                    $.each(data,function(index,val){
+                        var elem = $('<div class="castComment" data-uuid="'+val.id+'">'+
+                            '<p class="castCommentChildContent">'+val.content+'</p>'+
+                            '<p class="castCommentChildUser">'+val.user.name+'</p>'+
+                            '</div>');
+                        $('.commentsContainer').append(elem);
+                    })
+                }
+            }
+        });
+    }
+
+    function resetCommentContainer(){
+        $('.commentsContainer').empty()
+        $('#commentInput').val('');
+    }
+
+    function showComments(cast_id){
+        openCastId = [];
+        openCastId.push(cast_id);
+        resetCommentContainer();
+        $('.commentArea').removeClass('hidden');
+        var castPath = "#{root_url}/casts/"+cast_id;
+        var commentsPath = "#{root_url}/casts/"+cast_id+"/comments"
+        populateComments(castPath,true);
+        populateComments(commentsPath,false);
+    }
+
+    $('#closeComments').click(function(){
+        $('.commentArea').addClass('hidden');
+    });
+
+    function postComment(cast_ID){
+        var commentVal = $('#commentInput').val();
+        if(commentVal!==''){
+            $.post("#{comments_path}", { content: commentVal, user_id: "#{current_user}", cast_id: cast_ID },
+                function(data){
+                    console.log('posted:'+data);
+                },'json');
+        }else{
+            console.log("Please enter a comment in order to submit");
+        }
+    }
+
+    $('#submitComment').click(function(){
+        console.log(openCastId[0]);
+        if(openCastId[0]){
+            var castPath = "#{root_url}/casts/"+openCastId[0];
+            var commentsPath = "#{root_url}/casts/"+openCastId[0]+"/comments"
+            postComment(openCastId[0]);
+            resetCommentContainer();
+            populateComments(castPath,true);
+            populateComments(commentsPath,false);
+        }
+    })
+
     function populateMarkers(path,map){
         $.getJSON(path,function(data) {
           removeAllMarkersFromMap();
@@ -91,10 +180,10 @@
             //determine latLng
             var latLng = new google.maps.LatLng(cast.lat,cast.lon);
             //add content to each infowindow
-            var contentString = '<div class="castPopup '+cast.id+'Popup">'+
+            var contentString = '<div class="castPopup '+cast.id+'Popup" id="cast.id">'+
                     '<p class=castTitle '+cast.id+'Title>'+cast.title+'</p>'+
                     '<p class=castContent '+cast.id+'Content>'+cast.content+'</p>'+
-                    "<p class=castExpiration "+cast.id+"Expiration>"+parseFloat(findDaysLeft(cast.expiration)).toFixed(2)+" Days Left</p>"
+                    "<p class=castExpiration "+cast.id+"Expiration>"+findDaysLeft(cast.expiration)+" Days Left</p>"
                     '</div>'
             var infowindow = new google.maps.InfoWindow({
                 content: contentString
@@ -106,7 +195,7 @@
             if(color==='expired'){
                 deleteMarker(cast.id);
             }else{
-                populateMarker(latLng,map,infowindow,cast.title,color);
+                populateMarker(latLng,map,infowindow,cast.id,color);
             }
           });
       })
@@ -152,11 +241,5 @@
       })
     }
     google.maps.event.addDomListener(window, 'load', initialize);
-
-
-%h2#circleHeader #{@user.name}'s Circle
-%div
-    #map
-.groupsContainer
 
 

@@ -2,6 +2,7 @@ class Cast < ActiveRecord::Base
   belongs_to :user
   has_many :castgroups, dependent: :destroy, inverse_of: :cast
   has_many :groups, through: :castgroups, inverse_of: :casts
+  has_many :comments, dependent: :destroy
 
   validates :user_id, presence: true
   validates :title, presence: true, length: { maximum: 100 }

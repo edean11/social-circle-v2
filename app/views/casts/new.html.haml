@@ -12,6 +12,6 @@
     = f.button :submit, "Cast Message"
   - else
     %p Choose a Location for this message by clicking somewhere on the map below or clicking 'Set Current Location'
-    %button#setCurrentLocation Set Current Location
+    %button#setCurrentLocation{:type => "button"} Set Current Location
     #placeCastMap
     %button#setChosenLocation.hidden Save Cast

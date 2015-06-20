@@ -43,6 +43,26 @@ function initialize() {
   var placeMap = new google.maps.Map(document.getElementById('placeCastMap'),
       placeMapOptions);
 
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+      alert("Geolocation is not supported by this browser.");
+    }
+  }
+
+  function showPosition(position) {
+    var lat = position.coords.latitude;
+    var lng = position.coords.longitude;
+    var pos = new google.maps.LatLng(lat, lng);
+    placeMarker(pos,placeMap);
+    map.setCenter(new google.maps.LatLng(lat, lng));
+  }
+
+  $('#setCurrentLocation').click(function(){
+    getLocation();
+  })
+
   google.maps.event.addListener(placeMap, 'click', function(e) {
     placeMarker(e.latLng, placeMap);
   });
