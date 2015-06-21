@@ -6,6 +6,13 @@ class CastsController < ApplicationController
     elsif params[:group_id]
       @group = Group.find(params[:group_id])
       @casts = @group.casts
+    elsif params[:search_title]
+      @casts = Cast.where('title LIKE ?', "%#{params[:search_title]}%")
+    elsif params[:search_content]
+      @casts = Cast.where('content LIKE ?', "%#{params[:search_content]}%")
+    elsif params[:search_user]
+      @user = User.where('name LIKE ?', "%#{params[:search_user]}%")
+      @casts = Cast.where('user_id LIKE ?', "%#{@user.id}%")
     else
       @casts = Cast.all
     end

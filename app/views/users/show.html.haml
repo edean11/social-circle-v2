@@ -1,21 +1,32 @@
-%p= link_to "New Cast", new_cast_path, class: "btn btn-inverse new-cast-button"
-%p= link_to "New Group", new_group_path, class: "btn btn-inverse new-group-button"
-%p= link_to "New Subscription", new_subscription_path, class: "btn btn-inverse new-group-button"
-
-
-%h2#circleHeader #{@user.name}'s Circle
-%div
-    #map
-.groupsContainer
-.commentArea.hidden
-    %button#closeComments Close
-    .commentsContainer
-        .castCommentsHeader
-        .castComments
-    .commentInputContainer
-        %input#commentInput
-        %button#submitComment Submit
-
+#padding-fix.container-fluid
+    .row
+        %h2#circleHeader #{@user.name}'s Circle
+    .row
+        .linkWedgeTopLeft
+            = link_to "", new_cast_path, class: "fa fa-rss", id: 'castIconLink'
+        .linkWedgeTopRight
+            = link_to "", new_group_path, class: "fa fa-users", id: 'groupIconLink'
+        .linkWedgeBottomLeft
+            = link_to "", new_subscription_path, class: "fa fa-bookmark", id: 'subscriptionIconLink'
+        #map.col-sm-7
+        .sidebarContainer.col-sm-5
+            .groupsContainer
+            .commentArea.hidden
+                %button#closeComments Close
+                .commentsContainer
+                    .castCommentsHeader
+                    .castComments
+                .commentInputContainer
+                    %input#commentInput
+                    %button#submitComment Submit
+            .searchArea
+                %p Search
+                %select#searchType
+                    %option Title
+                    %option Content
+                    %option User
+                %input.searchInput
+                %button.submitSearch{:type => "button"} Submit
 
 :javascript
 
@@ -26,6 +37,14 @@
     var userName = "#{@user.name}"
     var userId = "#{@user.id}"
     var openCastId = [];
+    var lastRefreshCastIds = [];
+    var lastUsedPath = [];
+
+
+
+    //////////////////////////////////////////////
+    //////////////// MARKERS /////////////////////
+    //////////////////////////////////////////////
 
     //Create marker icon
     function createIcon(pinColor){
@@ -74,7 +93,6 @@
           infoWindows[i].close();
         }
     }
-
     function findDaysLeft(expiration){
         var now = new Date();
         var exp = Date.parse(expiration);
@@ -101,6 +119,78 @@
         return color;
     }
 
+    function makeInfoWindow(cast){
+        //add content to each infowindow
+        var contentString = '<div class="castPopup '+cast.id+'Popup" id="cast.id">'+
+                '<p class=castTitle '+cast.id+'Title>'+cast.title+'</p>'+
+                '<p class=castContent '+cast.id+'Content>'+cast.content+'</p>'+
+                "<p class=castExpiration "+cast.id+"Expiration>"+findDaysLeft(cast.expiration)+" Days Left</p>"
+                '</div>'
+        var infowindow = new google.maps.InfoWindow({
+            content: contentString
+        });
+        //populate variable array for reference
+        infoWindows.push(infowindow);
+        return infowindow;
+    }
+
+    function populateMarkers(path,map){
+        $.getJSON(path,function(data) {
+          lastUsedPath = [];
+          lastUsedPath.push(path);
+          lastRefreshCastIds = [];
+          lastRefreshedCasts = [];
+          lastRefreshedCasts.push(data);
+          removeAllMarkersFromMap();
+          //loop through all owned markers and append
+          $.each(data,function(index,cast){
+            //determine latLng
+            var latLng = new google.maps.LatLng(cast.lat,cast.lon);
+            var infowindow = makeInfoWindow(cast);
+            //attach markers and info windows to map
+            var color = findMarkerColor(cast.expiration);
+            if(color==='expired'){
+                deleteMarker(cast.id);
+
+            }else{
+                populateMarker(latLng,map,infowindow,cast.id,color);
+                lastRefreshCastIds.push(cast.id);
+            }
+          });
+      })
+    }
+
+    function updateMarkers(){
+        $.getJSON(lastUsedPath[0],function(data){
+            var newCastIds = [];
+            //populate new casts
+            $.each(data,function(index,cast){
+                newCastIds.push(cast.id)
+                if(lastRefreshCastIds.indexOf(cast.id)===-1){
+                    //determine latLng
+                    var latLng = new google.maps.LatLng(cast.lat,cast.lon);
+                    var infowindow = makeInfoWindow(cast);
+                    //attach markers and info windows to map
+                    var color = findMarkerColor(cast.expiration);
+                    populateMarker(latLng,mapArr[0],infowindow,cast.id,color);
+                    lastRefreshCastIds = [];
+                    lastRefreshCastIds.push(cast.id);
+                }
+            })
+            //remove expired casts
+            $.each(lastRefreshedCasts[0],function(index,cast){
+                if(newCastIds.indexOf(cast.id)===-1){
+                    deleteMarker(cast.id);
+                }
+            })
+        })
+    }
+
+    //////////////////////////////////////////////
+    //////////////// COMMENTS ////////////////////
+    //////////////////////////////////////////////
+
+
     function populateComments(path,is_parent){
         $.getJSON(path,function(data){
             if(is_parent){
@@ -114,7 +204,6 @@
                 $('.commentsContainer').append(elem);
             }else{
                 if(Object.keys(data).length>0){
-                    console.log(data);
                     $.each(data,function(index,val){
                         var elem = $('<div class="castComment" data-uuid="'+val.id+'">'+
                             '<p class="castCommentChildContent">'+val.content+'</p>'+
@@ -171,35 +260,31 @@
         }
     })
 
-    function populateMarkers(path,map){
-        $.getJSON(path,function(data) {
-          removeAllMarkersFromMap();
-          var lastCast = data[data.length-1];
-          //loop through all owned markers and append
-          $.each(data,function(index,cast){
-            //determine latLng
-            var latLng = new google.maps.LatLng(cast.lat,cast.lon);
-            //add content to each infowindow
-            var contentString = '<div class="castPopup '+cast.id+'Popup" id="cast.id">'+
-                    '<p class=castTitle '+cast.id+'Title>'+cast.title+'</p>'+
-                    '<p class=castContent '+cast.id+'Content>'+cast.content+'</p>'+
-                    "<p class=castExpiration "+cast.id+"Expiration>"+findDaysLeft(cast.expiration)+" Days Left</p>"
-                    '</div>'
-            var infowindow = new google.maps.InfoWindow({
-                content: contentString
-            });
-            //populate variable array for reference
-            infoWindows.push(infowindow);
-            //attach markers and info windows to map
-            var color = findMarkerColor(cast.expiration);
-            if(color==='expired'){
-                deleteMarker(cast.id);
-            }else{
-                populateMarker(latLng,map,infowindow,cast.id,color);
-            }
-          });
-      })
+    /////////////////////////////////////////////
+    //////////////// SEARCH /////////////////////
+    /////////////////////////////////////////////
+
+    function searchCasts(){
+        var selectedType = $('#searchType option:selected').text();
+        var searchVal = $('.searchInput').val();
+        $('#circleHeader').text(searchVal+" Casts");
+        if(selectedType==='Title'){
+            populateMarkers("#{root_url}/casts.json?search_title="+searchVal,mapArr[0]);
+        }else if(selectedType==='Content'){
+            populateMarkers("#{root_url}/casts.json?search_content="+searchVal,mapArr[0]);
+        }else if(selectedType==='Users'){
+            populateMarkers("#{root_url}/casts.json?search_user="+searchVal,mapArr[0]);
+        }else{console.log('invalid search')}
     }
+
+    $('.submitSearch').click(function(){
+        searchCasts();
+        $('.searchInput').val('');
+    })
+
+    //////////////////////////////////////////////
+    //////////////// INITIALIZE //////////////////
+    //////////////////////////////////////////////
 
     function populateSubscribedGroups(){
         var myCastsElem = $('<div class="groupContainer" data-uuid="'+userId+'"><p class="groupName">'+
@@ -226,6 +311,7 @@
         mapOptions);
       mapArr.push(map);
       populateMarkers("#{user_casts_path(@user)}",map)
+      var refreshCastInterval = setInterval(updateMarkers,5000);
       populateSubscribedGroups();
       $('.groupsContainer').click('.groupContainer',function(e){
         if($(e.target).attr('data-uuid')){

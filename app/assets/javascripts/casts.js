@@ -56,7 +56,7 @@ function initialize() {
     var lng = position.coords.longitude;
     var pos = new google.maps.LatLng(lat, lng);
     placeMarker(pos,placeMap);
-    map.setCenter(new google.maps.LatLng(lat, lng));
+    placeMap.setCenter(new google.maps.LatLng(lat, lng));
   }
 
   $('#setCurrentLocation').click(function(){
