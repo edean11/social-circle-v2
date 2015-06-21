@@ -8,6 +8,8 @@
             = link_to "", new_group_path, class: "fa fa-users", id: 'groupIconLink'
         .linkWedgeBottomLeft
             = link_to "", new_subscription_path, class: "fa fa-bookmark", id: 'subscriptionIconLink'
+        .linkWedgeBottomRight
+            %i.fa.fa-bullseye#myLocationButton
         #map.col-sm-7
         .sidebarContainer.col-sm-5
             .groupsContainer
@@ -39,6 +41,7 @@
     var openCastId = [];
     var lastRefreshCastIds = [];
     var lastUsedPath = [];
+    lastRefreshedCasts = [];
 
 
 
@@ -163,6 +166,8 @@
     function updateMarkers(){
         $.getJSON(lastUsedPath[0],function(data){
             var newCastIds = [];
+            lastRefreshedCasts = [];
+            lastRefreshedCasts.push(data);
             //populate new casts
             $.each(data,function(index,cast){
                 newCastIds.push(cast.id)
@@ -173,7 +178,6 @@
                     //attach markers and info windows to map
                     var color = findMarkerColor(cast.expiration);
                     populateMarker(latLng,mapArr[0],infowindow,cast.id,color);
-                    lastRefreshCastIds = [];
                     lastRefreshCastIds.push(cast.id);
                 }
             })
@@ -181,6 +185,8 @@
             $.each(lastRefreshedCasts[0],function(index,cast){
                 if(newCastIds.indexOf(cast.id)===-1){
                     deleteMarker(cast.id);
+                    var ind = lastRefreshedCastIds.indexOf(cast.id);
+                    lastRefreshedCastIds.splice(ind,1)
                 }
             })
         })
@@ -249,7 +255,6 @@
     }
 
     $('#submitComment').click(function(){
-        console.log(openCastId[0]);
         if(openCastId[0]){
             var castPath = "#{root_url}/casts/"+openCastId[0];
             var commentsPath = "#{root_url}/casts/"+openCastId[0]+"/comments"
@@ -299,6 +304,27 @@
         });
     }
 
+    function setCenter(position){
+        var lat = position.coords.latitude;
+        var lng = position.coords.longitude;
+        var pos = new google.maps.LatLng(lat, lng);
+        mapArr[0].setCenter(new google.maps.LatLng(lat, lng));
+    }
+
+    function getLocation() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(setCenter);
+        } else {
+          alert("Geolocation is not supported by this browser.");
+        }
+    }
+
+    function addMyLocationListener(){
+        $('#myLocationButton').click(function(){
+            getLocation();
+        })
+    }
+
     function initialize() {
       if(!($('#map').length)){return}
       //insert rails variables here
@@ -313,6 +339,7 @@
       populateMarkers("#{user_casts_path(@user)}",map)
       var refreshCastInterval = setInterval(updateMarkers,5000);
       populateSubscribedGroups();
+      addMyLocationListener();
       $('.groupsContainer').click('.groupContainer',function(e){
         if($(e.target).attr('data-uuid')){
             var groupName = $(e.target).children()[0].innerHTML;

@@ -34,6 +34,12 @@ class GroupsController < ApplicationController
   def destroy
   end
 
+  def self.unsubscribed_groups
+    groups = Group.joins(:subscriptions)
+    output = groups.where.not(user_id: current_user.id)
+    return output
+  end
+
   protected
 
   def group_params

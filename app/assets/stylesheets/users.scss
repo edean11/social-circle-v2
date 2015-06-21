@@ -4,7 +4,7 @@
 
 $mapHeight: 700px;
 $mapWidth: 600px;
-$mapTop: 115px;
+$mapTop: 140px;
 $linkWedgeSize: 200px;
 
 body {
@@ -36,7 +36,7 @@ body {
     font-size: 80px;
 }
 
-.linkWedgeTopLeft,.linkWedgeTopRight,.linkWedgeBottomLeft {
+.linkWedgeTopLeft,.linkWedgeTopRight,.linkWedgeBottomLeft,.linkWedgeBottomRight {
     position: absolute;
     background-color: white;
     opacity: 0.3;
@@ -45,7 +45,7 @@ body {
     text-decoration: none;
 }
 
-#castIconLink, #groupIconLink, #subscriptionIconLink {
+#castIconLink, #groupIconLink, #subscriptionIconLink, #myLocationButton {
     color: black;
     font-size: 6em;
     &:hover {
@@ -62,5 +62,11 @@ body {
 
 .linkWedgeBottomLeft {
     top: ($mapHeight)-70px;
+}
+
+.linkWedgeBottomRight {
+    left: $mapWidth;
+    top: ($mapHeight)-70px;
+    text-align: right;
 }
 

@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   root 'users#index'
 
   resource :user_session, only: [:new, :create, :destroy]
-  resources :users, only: [:new, :create, :show] do
+  resources :users, only: [:new, :create, :show, :edit, :update] do
     resources :casts, :only => :index, format: "json"
     resources :groups, :only => :index, format: "json"
     resources :comments, :only => :index, format: "json"
