@@ -196,8 +196,15 @@
     //////////////// COMMENTS ////////////////////
     //////////////////////////////////////////////
 
+    var lastCommentsPath = [];
+    var refreshCommentsInterval;
+    var lastCommentRefreshLength = 0;
 
     function populateComments(path,is_parent){
+        if(!is_parent){
+            lastCommentsPath = [];
+            lastCommentsPath.push(path);
+        }
         $.getJSON(path,function(data){
             if(is_parent){
                 var elem = $('<div class="castComment" data-uuid="'+data.id+'">'+
@@ -207,23 +214,30 @@
                         '<p class="castCommentParentExpiration">'+findDaysLeft(data.expiration)+
                             ' Days Remaining</p>'+
                         '</div>');
-                $('.commentsContainer').append(elem);
+                $('.castCommentsHeader').append(elem);
             }else{
-                if(Object.keys(data).length>0){
+                if(lastCommentRefreshLength!==Object.keys(data).length){
+                    $('.castComments').empty();
                     $.each(data,function(index,val){
                         var elem = $('<div class="castComment" data-uuid="'+val.id+'">'+
                             '<p class="castCommentChildContent">'+val.content+'</p>'+
                             '<p class="castCommentChildUser">'+val.user.name+'</p>'+
                             '</div>');
-                        $('.commentsContainer').append(elem);
+                        $('.castComments').append(elem);
                     })
+                    lastCommentRefreshLength = Object.keys(data).length;
                 }
             }
         });
     }
 
+    function updateComments(){
+        populateComments(lastCommentsPath[0],false);
+    }
+
     function resetCommentContainer(){
-        $('.commentsContainer').empty()
+        $('.castCommentsHeader').empty();
+        $('.castComments').empty()
         $('#commentInput').val('');
     }
 
@@ -232,14 +246,20 @@
         openCastId.push(cast_id);
         resetCommentContainer();
         $('.commentArea').removeClass('hidden');
+        $('.groupsContainer').addClass('hidden');
+        $('.searchArea').addClass('hidden');
         var castPath = "#{root_url}/casts/"+cast_id;
         var commentsPath = "#{root_url}/casts/"+cast_id+"/comments"
         populateComments(castPath,true);
         populateComments(commentsPath,false);
+        refreshCommentsInterval = setInterval(updateComments,5000);
     }
 
     $('#closeComments').click(function(){
         $('.commentArea').addClass('hidden');
+        $('.groupsContainer').removeClass('hidden');
+        $('.searchArea').removeClass('hidden');
+        clearInterval(refreshCommentsInterval);
     });
 
     function postComment(cast_ID){
