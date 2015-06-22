@@ -11,18 +11,17 @@
     %link{:href => "//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css", :rel => "stylesheet"}/
     = csrf_meta_tags
   %body
-    #container
-      %nav
-        %ul
-          %li= link_to "Social Circle", root_path
-          - if !logged_in?
-            - unless controller_name == "users" && action_name != "index"
-              %li= link_to "Sign Up", new_user_path
-            - unless controller_name == "user_sessions"
-              %li= link_to "Sign In", new_user_session_path
-          - else
-            %li= link_to "Sign Out", user_session_path, method: :delete
-            %li= link_to "Edit Profile", edit_user_path(current_user)
+    .main-container
+      .nav-container
+        .logo.nav-link= link_to image_tag('thesocialcircle.png'), root_path
+        - if !logged_in?
+          - unless controller_name == "users" && action_name != "index"
+            %p.nav-link= link_to "Sign Up", new_user_path
+          - unless controller_name == "user_sessions"
+            %p.nav-link= link_to "Sign In", new_user_session_path
+        - else
+          = link_to content_tag(:i,nil, class: 'fa fa-sign-out right-nav-link'), user_session_path, method: :delete
+          = link_to content_tag(:i,nil, class: 'fa fa-user right-nav-link'), edit_user_path(current_user)
       %section#content
         - flash.each do |key, message|
           %div{ class: "flash-#{key}" }= message

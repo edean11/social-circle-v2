@@ -1,34 +1,32 @@
-#padding-fix.container-fluid
-    .row
-        %h2#circleHeader #{@user.name}'s Circle
-    .row
-        .linkWedgeTopLeft
-            = link_to "", new_cast_path, class: "fa fa-rss", id: 'castIconLink'
-        .linkWedgeTopRight
-            = link_to "", new_group_path, class: "fa fa-users", id: 'groupIconLink'
-        .linkWedgeBottomLeft
-            = link_to "", new_subscription_path, class: "fa fa-bookmark", id: 'subscriptionIconLink'
-        .linkWedgeBottomRight
-            %i.fa.fa-bullseye#myLocationButton
-        #map.col-sm-7
-        .sidebarContainer.col-sm-5
-            .groupsContainer
-            .commentArea.hidden
-                %button#closeComments Close
-                .commentsContainer
-                    .castCommentsHeader
-                    .castComments
-                .commentInputContainer
-                    %input#commentInput
-                    %button#submitComment Submit
-            .searchArea
-                %p Search
-                %select#searchType
-                    %option Title
-                    %option Content
-                    %option User
-                %input.searchInput
-                %button.submitSearch{:type => "button"} Submit
+#padding-fix.container
+    %p#circleHeader #{@user.name}'s Circle
+    .linkWedgeTopLeft
+        = link_to "", new_cast_path, class: "fa fa-rss", id: 'castIconLink'
+    .linkWedgeTopRight
+        = link_to "", new_group_path, class: "fa fa-users", id: 'groupIconLink'
+    .linkWedgeBottomLeft
+        = link_to "", new_subscription_path, class: "fa fa-bookmark", id: 'subscriptionIconLink'
+    .linkWedgeBottomRight
+        %i.fa.fa-bullseye#myLocationButton
+    #map
+    .sidebarContainer
+        .groupsContainer
+        .commentArea.hidden
+            %button#closeComments Close
+            .commentsContainer
+                .castCommentsHeader
+                .castComments
+            .commentInputContainer
+                %input#commentInput
+                %button#submitComment Submit
+        .searchArea
+            %p Search
+            %select#searchType
+                %option Title
+                %option Content
+                %option User
+            %input.searchInput
+            %button.submitSearch{:type => "button"} Submit
 
 :javascript
 
