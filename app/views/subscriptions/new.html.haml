@@ -1,7 +1,96 @@
-- content_for(:page_title) do
-  %h1 New Subscription
 
-= simple_form_for @subscription, :html => {:multipart => true} do |f|
-  = f.simple_fields_for :groups do |ff|
-    = ff.input :group_id, collection: Group.all, as: :check_boxes
-  = f.button :submit, "Subscribe"
+%p.newSubscriptionTitle Groups
+%p.existingSubscriptionsHeader Member
+.existingSubscriptions
+%p.availableSubscriptionsHeader Available
+.availableSubscriptions
+
+:javascript
+
+    //////////////////////////////////////////
+    ///////// Existing Subscriptions /////////
+    //////////////////////////////////////////
+
+    var myGroupIds = [];
+
+    function makeRemoveSubscriptionElem(group){
+        var elem = '<div class="subscriptionContainer '+group.id+'Subscription">'+
+                        '<img class="subscriptionImage '+group.id+'SubscriptionImg" src="https://s3.amazonaws.com/social-circle-development/thesocialcircle.png"></img>'+
+                        '<p class="subscriptionHeader '+group.id+'SubscriptionHeader">'+group.name+'</p>'+
+                        '<p class="subscriptionContent '+group.id+'SubscriptionContent">'+group.description+'</p>'+
+                        '<button class="unsubscribeButton '+group.id+'UnsubscribeButton">Unsubscribe</button>'+
+                    '</div>'
+        $('.existingSubscriptions').append(elem);
+        attachUnsubscribeListener(group)
+    }
+
+    function appendExistingSubscriptions(){
+        $.getJSON("#{root_url}users/#{current_user.id}/groups",function(data){
+            if(Object.keys(data).length!==0){
+                $.each(data,function(index,group){
+                    myGroupIds.push(group.id);
+                    makeRemoveSubscriptionElem(group);
+                })
+            }
+        })
+    }
+
+    function attachUnsubscribeListener(group){
+        console.log(group);
+        $('.'+group.id+'UnsubscribeButton').click(function(){
+            $.ajax({
+              url: "/subscriptions/" + group.subscriptions[0].id,
+              type: "post",
+              dataType: "json",
+              data: {"_method":"delete"}
+            });
+        })
+    }
+
+
+    //////////////////////////////////////////
+    ///////// Available Subscriptions ////////
+    //////////////////////////////////////////
+
+    function makeNewSubscriptionElem(group){
+        var elem = $('<div class="subscriptionContainer '+group.id+'Subscription">'+
+                        '<img class="subscriptionImage '+group.id+'SubscriptionImg" src="https://s3.amazonaws.com/social-circle-development/thesocialcircle.png"></img>'+
+                        '<p class="subscriptionHeader '+group.id+'SubscriptionHeader">'+group.name+'</p>'+
+                        '<p class="subscriptionContent '+group.id+'SubscriptionContent">'+group.description+'</p>'+
+                        '<button class="subscriptionButton '+group.id+'SubscriptionButton">Subscribe</button>'+
+                    '</div>');
+        $('.availableSubscriptions').append(elem);
+        attachSubscribeListener(group);
+    }
+
+    function appendAvailableSubscriptions(){
+        $.getJSON("#{root_url}groups",function(data){
+            if(Object.keys(data).length!==0){
+                $.each(data,function(index,group){
+                    if(myGroupIds.indexOf(group.id)===-1){
+                        makeNewSubscriptionElem(group);
+                    }
+                })
+            }
+        })
+    }
+
+    function attachSubscribeListener(group){
+        $('.'+group.id+'SubscriptionButton').click(function(){
+            $.post("#{subscriptions_path}", {group_id: group.id, user_id: "#{current_user.id}"},
+                function(data){
+                    console.log('subscribed:'+data);
+                },'json');
+        })
+    }
+
+    //////////////////////////////////////////
+    ///////// On Document Ready //////////////
+    //////////////////////////////////////////
+
+    $(document).ready(function(){
+        appendExistingSubscriptions();
+        appendAvailableSubscriptions();
+    });
+
+
