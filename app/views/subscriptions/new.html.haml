@@ -36,15 +36,19 @@
     }
 
     function attachUnsubscribeListener(group){
-        console.log(group);
         $('.'+group.id+'UnsubscribeButton').click(function(){
             $.ajax({
               url: "/subscriptions/" + group.subscriptions[0].id,
               type: "post",
               dataType: "json",
-              data: {"_method":"delete"}
+              data: {"_method":"delete"},
+              success: deleteSubscriptionSuccess
             });
         })
+    }
+
+    function deleteSubscriptionSuccess(){
+        console.log('deleted');
     }
 
 
