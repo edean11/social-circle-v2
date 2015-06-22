@@ -198,7 +198,7 @@
     var refreshCommentsInterval;
     var lastCommentRefreshLength = 0;
 
-    function populateComments(path,is_parent){
+    function populateComments(path,is_parent,is_new){
         if(!is_parent){
             lastCommentsPath = [];
             lastCommentsPath.push(path);
@@ -214,7 +214,7 @@
                         '</div>');
                 $('.castCommentsHeader').append(elem);
             }else{
-                if(lastCommentRefreshLength!==Object.keys(data).length){
+                if(lastCommentRefreshLength!==Object.keys(data).length || is_new){
                     $('.castComments').empty();
                     $.each(data,function(index,val){
                         var elem = $('<div class="castComment" data-uuid="'+val.id+'">'+
@@ -248,8 +248,8 @@
         $('.searchArea').addClass('hidden');
         var castPath = "#{root_url}/casts/"+cast_id;
         var commentsPath = "#{root_url}/casts/"+cast_id+"/comments"
-        populateComments(castPath,true);
-        populateComments(commentsPath,false);
+        populateComments(castPath,true,true);
+        populateComments(commentsPath,false,true);
         refreshCommentsInterval = setInterval(updateComments,5000);
     }
 
@@ -278,8 +278,8 @@
             var commentsPath = "#{root_url}/casts/"+openCastId[0]+"/comments"
             postComment(openCastId[0]);
             resetCommentContainer();
-            populateComments(castPath,true);
-            populateComments(commentsPath,false);
+            populateComments(castPath,true,false);
+            populateComments(commentsPath,false,false);
         }
     })
 
