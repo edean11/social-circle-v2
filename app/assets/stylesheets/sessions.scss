@@ -1,3 +1,117 @@
 // Place all the styles related to the sessions controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.home-logo img{
+    width: 600px;
+    margin: 20px 0;
+ }
+
+ .home-logo{
+    width: 600px;
+    margin: 0 auto;
+ }
+
+ .signInHeader {
+    font-size: 3em;
+    text-align: center;
+ }
+
+ .signInContainer {
+    border: 3px solid black;
+    background-color: lightgrey;
+    padding: 20px;
+    border-radius: 10px;
+    width: 50%;
+    height: 300px;
+    margin: 20px auto;
+    text-align: center;
+
+    .btn {
+        padding: 10px;
+        background-color: lighten(limegreen, 30%);
+        border: 1px solid black;
+        border-radius: 5px;
+
+        &:hover {
+            background-color: limegreen;
+        }
+    }
+
+    .nav-link {
+        float: right;
+        font-size: 0.8em;
+    }
+
+    .user_name,.user_password {
+        margin: 50px 20px;
+        label {
+            margin-right: 10px;
+            display: block;
+        }
+        input {
+            border: 1px solid black;
+            border-radius: 10px;
+            padding: 5px;
+            width: 40%;
+        }
+    }
+ }
+
+ .signUpHeader {
+    font-size: 1.5em;
+    text-align: center;
+ }
+
+ .signUpContainer{
+    border: 3px solid black;
+    background-color: lightgrey;
+    border-radius: 10px;
+    width: 50%;
+    height: 350px;
+    margin: 20px auto;
+    text-align: center;
+    padding: 10px;
+
+    .user_name,.user_password,.user_password_confirmation,.user_email,.user_default_zip{
+        margin: 20px;
+        label {
+            margin-right: 10px;
+            display: block;
+        }
+        input {
+            border: 1px solid black;
+            border-radius: 10px;
+            padding: 5px;
+            width: 85%;
+        }
+    }
+
+    #user_avatar {
+        margin: 10px auto 150px;
+    }
+
+    .signUpLeft {
+        width: 45%;
+        display: inline-block;
+    }
+
+    .signUpRight {
+        width: 45%;
+        display: inline-block;
+        float: right;
+    }
+
+    .btn {
+        padding: 10px;
+        background-color: lighten(limegreen, 30%);
+        border: 1px solid black;
+        border-radius: 5px;
+        display: block;
+        margin: 0 auto;
+
+        &:hover {
+            background-color: limegreen;
+        }
+    }
+ }

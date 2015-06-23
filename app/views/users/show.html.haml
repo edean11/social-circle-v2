@@ -1,13 +1,9 @@
 #padding-fix.container
     %p#circleHeader #{@user.name}'s Circle
-    .linkWedgeTopLeft
-        = link_to "", new_cast_path, class: "fa fa-rss", id: 'castIconLink'
-    .linkWedgeTopRight
-        = link_to "", new_group_path, class: "fa fa-users", id: 'groupIconLink'
-    .linkWedgeBottomLeft
-        = link_to "", new_subscription_path, class: "fa fa-bookmark", id: 'subscriptionIconLink'
-    .linkWedgeBottomRight
-        %i.fa.fa-bullseye#myLocationButton
+    = link_to "", new_cast_path, class: "fa fa-rss", id: 'castIconLink'
+    = link_to "", new_group_path, class: "fa fa-users", id: 'groupIconLink'
+    = link_to "", new_subscription_path, class: "fa fa-bookmark", id: 'subscriptionIconLink'
+    %i.fa.fa-bullseye#myLocationButton
     #map
     .sidebarContainer
         .groupsContainer
@@ -20,7 +16,7 @@
                 %input#commentInput
                 %button#submitComment Submit
         .searchArea
-            %p Search
+            %p.searchHeader Search
             %select#searchType
                 %option Title
                 %option Content

@@ -1,3 +1,54 @@
 // Place all the styles related to the Groups controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.newGroupHeader {
+    text-align: center;
+    font-size: 3em;
+}
+
+.newGroupContainer {
+    width: 80%;
+    margin: 20px auto;
+    border: 2px solid black;
+    border-radius: 10px;
+    background-color: lightgrey;
+    padding: 60px;
+
+    .group_name,.group_description {
+        display: inline-block;
+        margin: 40px 0;
+        label {
+            margin-right: 10px;
+        }
+        input {
+            border: 1px solid black;
+            border-radius: 10px;
+            padding: 5px;
+        }
+    }
+
+    .group_name {
+        margin-right: 10px;
+    }
+
+    #group_description {
+        width: 650px;
+    }
+
+    #group_picture {
+    }
+
+    .btn {
+        float: right;
+        padding: 10px;
+        background-color: lighten(limegreen, 30%);
+        border: 1px solid black;
+        border-radius: 5px;
+
+        &:hover {
+            background-color: limegreen;
+        }
+    }
+
+}

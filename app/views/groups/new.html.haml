@@ -1,8 +1,7 @@
-- content_for(:page_title) do
-  %h1 New Group
-
+%p.newGroupHeader New Group
 = simple_form_for @group, :html => {:multipart => true} do |f|
-  = f.input :name
-  = f.input :description
-  = f.file_field :picture, label: "Upload A Group Image"
-  = f.button :submit, "Create Group"
+  .newGroupContainer
+    = f.input :name
+    = f.input :description
+    = f.file_field :picture, label: "Upload A Group Image"
+    = f.button :submit, "Create Group"

@@ -16,7 +16,7 @@ body {
 }
 
 .nav-container {
-    background-color: darkgrey;
+    background-color: lighten(black,30%);
     border-top: 1px solid black;
     border-bottom: 1px solid black;
 }
@@ -28,16 +28,16 @@ body {
 
 .right-nav-link {
     float: right;
-    color: black;
+    color: white;
     &:hover {
-        color: steelblue;
+        color: lighten(steelblue,20%);
     }
 }
 
 #circleHeader {
-    background-color: lightgrey;
+    background-color: darkgrey;
     color: black;
-    border: 1px solid black;
+    border: 2px solid black;
     text-align: center;
     border-radius: 5px;
     width: 350px;
@@ -60,15 +60,12 @@ body {
 
 // Map Corner Links
 
-.linkWedgeTopLeft,.linkWedgeTopRight,.linkWedgeBottomLeft,.linkWedgeBottomRight {
-    position: absolute;
-    top: $mapTop;
-    text-decoration: none;
-    opacity: 0.7;
-}
-
 #castIconLink, #groupIconLink, #subscriptionIconLink, #myLocationButton {
-    color: black;
+    position: absolute;
+    z-index: 100;
+    margin-top: 20px;
+    margin-left: 20px;
+    color: lighten(black,30%);
     font-size: 4em;
     text-decoration: none;
     &:hover {
@@ -77,20 +74,20 @@ body {
     }
 }
 
-.linkWedgeTopRight{
-    left: $mapWidth;
-    text-align: right;
+#groupIconLink {
+    margin-top: 550px;
 }
 
-
-.linkWedgeBottomLeft {
-    top: ($mapHeight)-70px;
+#subscriptionIconLink {
+    margin-left: 590px;
 }
 
-.linkWedgeBottomRight {
-    left: $mapWidth;
-    top: ($mapHeight)-70px;
-    text-align: right;
+#myLocationButton {
+    margin-top: 550px;
+    margin-left: 590px;
+    &:hover {
+        cursor: pointer;
+    }
 }
 
 // Sidebar Styles
@@ -103,18 +100,59 @@ body {
 
 .groupsContainer{
     padding: 10px;
+    height: 500px;
+    overflow: auto;
     .groupContainer {
         display: inline-block;
         text-align: center;
         width: 100px;
         height: 100px;
-        border: 2px solid black;
+        border: 2px solid lighten(black,30%);
         border-radius: 5px;
         margin: 20px;
+        color: lighten(black,30%)
     }
 }
 
-#searchType{
+.searchArea {
+    position: fixed;
+    bottom: 0;
+    right: 2%;
+    width: 40%;
+    background-color: lighten(black,30%);
+    color: white;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 5px;
+
+    .searchHeader {
+        display: inline-block;
+        margin-right: 20px;
+    }
+    input {
+        border: 1px solid black;
+        border-radius: 10px;
+        padding: 5px;
+        width: 45%;
+        color: black;
+    }
+
+    .submitSearch {
+        float: right;
+        padding: 10px;
+        background-color: lighten(limegreen, 30%);
+        border: 1px solid black;
+        border-radius: 5px;
+        color: black;
+        margin-top: 5px;
+
+        &:hover {
+            background-color: limegreen;
+        }
+    }
+}
+
+#searchType option{
     font-size: 30px;
 }
 

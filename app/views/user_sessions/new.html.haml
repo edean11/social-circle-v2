@@ -1,7 +1,10 @@
-- content_for(:page_title) do
-  %h1 Sign In
 
-= simple_form_for @user, url: user_session_path do |f|
-  = f.input :name
-  = f.input :password
-  = f.button :submit, "Sign In"
+%p.signInHeader Sign In
+
+.signInContainer
+    = simple_form_for @user, url: user_session_path do |f|
+        = f.input :name
+        = f.input :password
+        = f.button :submit, "Submit"
+
+    %p.nav-link= link_to "Don't Have a User Name Yet? Sign Up!", new_user_path

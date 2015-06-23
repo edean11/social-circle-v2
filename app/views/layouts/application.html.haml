@@ -13,13 +13,10 @@
   %body
     .main-container
       .nav-container
-        .logo.nav-link= link_to image_tag('thesocialcircle.png'), root_path
         - if !logged_in?
-          - unless controller_name == "users" && action_name != "index"
-            %p.nav-link= link_to "Sign Up", new_user_path
-          - unless controller_name == "user_sessions"
-            %p.nav-link= link_to "Sign In", new_user_session_path
+          .home-logo= link_to image_tag('thesocialcircle.png'), root_path
         - else
+          .logo.nav-link= link_to image_tag('thesocialcircle.png'), root_path
           = link_to content_tag(:i,nil, class: 'fa fa-sign-out right-nav-link'), user_session_path, method: :delete
           = link_to content_tag(:i,nil, class: 'fa fa-user right-nav-link'), edit_user_path(current_user)
       %section#content

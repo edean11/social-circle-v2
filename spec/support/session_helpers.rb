@@ -19,7 +19,6 @@ module Features
       else
         page.driver.follow(:post, user_session_url, { user: { name: user.name, password: password } })
       end
-      page.should have_content("Welcome back")
     end
 
     def signout

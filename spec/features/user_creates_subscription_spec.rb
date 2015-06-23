@@ -11,7 +11,7 @@ feature "User creates subscription" do
     group = Fabricate(:group)
     fill_in "Name", with: user.name
     fill_in "Password", with: "password1"
-    click_button "Sign In"
+    click_button "Submit"
     page.should have_content("New Subscription")
     click_on "New Subscription"
     current_path.should == new_subscription_path
@@ -30,7 +30,7 @@ feature "User creates subscription" do
     group2 = Fabricate(:group, description: 'another fake')
     fill_in "Name", with: user.name
     fill_in "Password", with: "password1"
-    click_button "Sign In"
+    click_button "Submit"
     page.should have_content("New Subscription")
     click_on "New Subscription"
     current_path.should == new_subscription_path

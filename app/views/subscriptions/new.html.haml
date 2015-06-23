@@ -1,9 +1,9 @@
 
 %p.newSubscriptionTitle Groups
-%p.existingSubscriptionsHeader Member
 .existingSubscriptions
-%p.availableSubscriptionsHeader Available
+    %p.existingSubscriptionsHeader Member
 .availableSubscriptions
+    %p.availableSubscriptionsHeader Available
 
 :javascript
 
@@ -15,9 +15,13 @@
 
     function makeRemoveSubscriptionElem(group){
         var elem = '<div class="subscriptionContainer '+group.id+'Subscription">'+
+                        '<div class="subscriptionImageContainer">'+
                         '<img class="subscriptionImage '+group.id+'SubscriptionImg" src="https://s3.amazonaws.com/social-circle-development/thesocialcircle.png"></img>'+
+                        '</div>'+
+                        '<div class="subscriptionContentContainer">'+
                         '<p class="subscriptionHeader '+group.id+'SubscriptionHeader">'+group.name+'</p>'+
                         '<p class="subscriptionContent '+group.id+'SubscriptionContent">'+group.description+'</p>'+
+                        '</div>'+
                         '<button class="unsubscribeButton '+group.id+'UnsubscribeButton">Unsubscribe</button>'+
                     '</div>'
         $('.existingSubscriptions').append(elem);
@@ -36,19 +40,20 @@
     }
 
     function attachUnsubscribeListener(group){
-        $('.'+group.id+'UnsubscribeButton').click(function(){
+        $('.'+group.id+'UnsubscribeButton').click(function(e){
             $.ajax({
               url: "/subscriptions/" + group.subscriptions[0].id,
               type: "post",
               dataType: "json",
               data: {"_method":"delete"},
-              success: deleteSubscriptionSuccess
+              success: deleteSubscriptionSuccess(e)
             });
         })
     }
 
-    function deleteSubscriptionSuccess(){
-        console.log('deleted');
+    function deleteSubscriptionSuccess(e){
+        $(e.target).css('background-color','tomato');
+        $(e.target).text('Unsubscribed')
     }
 
 
@@ -58,9 +63,13 @@
 
     function makeNewSubscriptionElem(group){
         var elem = $('<div class="subscriptionContainer '+group.id+'Subscription">'+
+                        '<div class="subscriptionImageContainer">'+
                         '<img class="subscriptionImage '+group.id+'SubscriptionImg" src="https://s3.amazonaws.com/social-circle-development/thesocialcircle.png"></img>'+
+                        '</div>'+
+                        '<div class="subscriptionContentContainer">'+
                         '<p class="subscriptionHeader '+group.id+'SubscriptionHeader">'+group.name+'</p>'+
                         '<p class="subscriptionContent '+group.id+'SubscriptionContent">'+group.description+'</p>'+
+                        '</div>'+
                         '<button class="subscriptionButton '+group.id+'SubscriptionButton">Subscribe</button>'+
                     '</div>');
         $('.availableSubscriptions').append(elem);
@@ -80,11 +89,18 @@
     }
 
     function attachSubscribeListener(group){
-        $('.'+group.id+'SubscriptionButton').click(function(){
-            $.post("#{subscriptions_path}", {group_id: group.id, user_id: "#{current_user.id}"},
-                function(data){
-                    console.log('subscribed:'+data);
-                },'json');
+        $('.'+group.id+'SubscriptionButton').click(function(e){
+            $.ajax({
+              url: "#{subscriptions_path}",
+              type: "post",
+              dataType: "json",
+              data: {group_id: group.id, user_id: "#{current_user.id}"},
+              success: endPost(e)
+            });
+            function endPost(e){
+                $(e.target).css('background-color','limegreen');
+                $(e.target).text('Subscribed')
+            }
         })
     }
 

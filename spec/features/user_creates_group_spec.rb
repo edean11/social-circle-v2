@@ -10,7 +10,7 @@ feature "User creates group" do
     user = Fabricate(:user, name: "Jenny")
     fill_in "Name", with: user.name
     fill_in "Password", with: "password1"
-    click_button "Sign In"
+    click_button "Submit"
     page.should have_content("New Group")
     click_on "New Group"
     current_path.should == new_group_path
@@ -28,7 +28,7 @@ feature "User creates group" do
     user = Fabricate(:user, name: "Jenny")
     fill_in "Name", with: user.name
     fill_in "Password", with: "password1"
-    click_button "Sign In"
+    click_button "Submit"
     page.should have_content("New Group")
     click_on "New Group"
     current_path.should == new_group_path

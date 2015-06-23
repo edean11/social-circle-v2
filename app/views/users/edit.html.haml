@@ -1,11 +1,14 @@
-- content_for(:page_title) do
-  %h1 Edit Profile
+%p.signUpHeader Edit Profile
 
-= simple_form_for @user, url: user_path, method: :put do |f|
-  = f.input :name
-  = f.input :email
-  = f.input :default_zip, label: "Default Zip"
-  = f.file_field :avatar, label: "Upload Your User Avatar"
-  = f.input :password
-  = f.input :password_confirmation
-  = f.button :submit, "Save Changes"
+.signUpContainer
+    = simple_form_for @user, url: user_path, method: :put do |f|
+        .signUpLeft
+            = f.input :name
+            = f.input :email
+            = f.input :default_zip, label: "Default Zip"
+            = f.input :password
+            = f.input :password_confirmation
+        .signUpRight
+            %p.avatar-label Avatar
+            = f.file_field :avatar, label: "Upload Your User Avatar"
+            = f.button :submit, "Save Changes"

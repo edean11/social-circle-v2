@@ -1,17 +1,21 @@
-- content_for(:page_title) do
-  %h1 New Cast
-
+%p.newCastHeader New Cast
 = simple_form_for @cast, :html => {:multipart => true} do |f|
-  = f.input :title
-  = f.input :content
-  = f.input :expiration, as: :string, :input_html => {:class => 'datetimePicker'}
-  = f.input :lat, :as => :hidden
-  = f.input :lon, :as => :hidden
-  = f.association :groups, as: :check_boxes
-  - if @cast.valid?
-    = f.button :submit, "Cast Message"
-  - else
-    %p Choose a Location for this message by clicking somewhere on the map below or clicking 'Set Current Location'
-    %button#setCurrentLocation{:type => "button"} Set Current Location
-    #placeCastMap
-    %button#setChosenLocation.hidden Save Cast
+  .newCastContentContainer
+    .newCastAttrContainer
+      %p.newCastAttrHeader Attributes
+      = f.input :title, :input_html => {:class => 'newCastTitle'}
+      = f.input :expiration, as: :string, :input_html => {:class => 'datetimePicker'}
+      = f.input :content, :input_html => {:class => 'newCastContent'}
+      = f.input :lat, :as => :hidden
+      = f.input :lon, :as => :hidden
+    .newCastGroupsContainer
+      = f.association :groups, as: :check_boxes, :input_html => {:class => 'newCastGroups'}
+    - if @cast.valid?
+      = f.button :submit, "Cast Message"
+    - else
+      .newCastLocationContainer
+        %p.newCastLocationHeader Location
+        %p Choose a Location for this message by clicking somewhere on the map below or clicking 'Set Current Location'
+        #placeCastMap
+        %button#setCurrentLocation{:type => "button"} Set Current Location
+        %button#setChosenLocation.hidden Save Cast

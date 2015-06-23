@@ -10,7 +10,7 @@ feature "User creates cast" do
     user = Fabricate(:user, name: "Jenny")
     fill_in "Name", with: user.name
     fill_in "Password", with: "password1"
-    click_button "Sign In"
+    click_button "Submit"
     page.should have_content("New Cast")
     click_on "New Cast"
     current_path.should == new_cast_path
@@ -30,7 +30,7 @@ feature "User creates cast" do
     user = Fabricate(:user, name: "Jenny")
     fill_in "Name", with: user.name
     fill_in "Password", with: "password1"
-    click_button "Sign In"
+    click_button "Submit"
     page.should have_content("New Cast")
     click_on "New Cast"
     current_path.should == new_cast_path
