@@ -35,7 +35,7 @@
     var openCastId = [];
     var lastRefreshCastIds = [];
     var lastUsedPath = [];
-    lastRefreshedCasts = [];
+    var lastRefreshedCasts = [];
 
 
 
@@ -53,6 +53,7 @@
     }
 
     //Marker functions
+
     function populateMarker(position,map,infowindow,cast_id,color) {
         var pinImage = createIcon(color);
         var marker = new google.maps.Marker({
@@ -116,19 +117,31 @@
         return color;
     }
 
-    function makeInfoWindow(cast){
-        //add content to each infowindow
+    function makeInfoBubble(cast,map,position){
         var contentString = '<div class="castPopup '+cast.id+'Popup" id="cast.id">'+
                 '<p class=castTitle '+cast.id+'Title>'+cast.title+'</p>'+
                 '<p class=castContent '+cast.id+'Content>'+cast.content+'</p>'+
                 "<p class=castExpiration "+cast.id+"Expiration>"+findDaysLeft(cast.expiration)+" Days Left</p>"
                 '</div>'
-        var infowindow = new google.maps.InfoWindow({
-            content: contentString
+        var infoBubble = new InfoBubble({
+          map: map,
+          content: contentString,
+          position: position,
+          padding: 4,
+          backgroundColor: 'grey',
+          borderRadius: 20,
+          borderWidth: 1,
+          borderColor: 'black',
+          disableAutoPan: false,
+          hideCloseButton: true,
+          backgroundClassName: 'infoBubble',
+          arrowSize: 0,
+          maxHeight: 40,
+          minWidth: 160,
+          maxWidth: 160
         });
-        //populate variable array for reference
-        infoWindows.push(infowindow);
-        return infowindow;
+        infoWindows.push(infoBubble);
+        return infoBubble;
     }
 
     function populateMarkers(path,map){
@@ -143,14 +156,14 @@
           $.each(data,function(index,cast){
             //determine latLng
             var latLng = new google.maps.LatLng(cast.lat,cast.lon);
-            var infowindow = makeInfoWindow(cast);
+            var infoBubble = makeInfoBubble(cast,map,latLng);
             //attach markers and info windows to map
             var color = findMarkerColor(cast.expiration);
             if(color==='expired'){
                 deleteMarker(cast.id);
 
             }else{
-                populateMarker(latLng,map,infowindow,cast.id,color);
+                populateMarker(latLng,map,infoBubble,cast.id,color);
                 lastRefreshCastIds.push(cast.id);
             }
           });
@@ -262,6 +275,7 @@
         $('.groupsContainer').removeClass('hidden');
         $('.searchArea').removeClass('hidden');
         clearInterval(refreshCommentsInterval);
+        closeAllInfoWindows();
     });
 
     function postComment(cast_ID){

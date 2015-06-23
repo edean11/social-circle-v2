@@ -45,10 +45,12 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
+    @user.avatar = params[:user][:avatar]
     if @user.save
+      binding.pry
       auto_login(@user)
-      uploader = AvatarUploader.new
-      uploader.store!(@user.avatar)
+      # uploader = AvatarUploader.new
+      # uploader.store!(@user.avatar)
       redirect_to user_path(@user), :notice => "Welcome, #{@user.name}"
     else
       flash.alert = "Please fix the errors below to continue."
@@ -59,7 +61,7 @@ class UsersController < ApplicationController
   protected
 
   def user_params
-    params.require(:user).permit(:name, :email, :default_zip, :password, :password_confirmation, :avatar)
+    params.require(:user).permit(:name, :email, :avatar, :avatar_url, :default_zip, :password, :password_confirmation)
   end
 
 end
