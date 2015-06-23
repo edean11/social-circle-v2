@@ -8,7 +8,7 @@
     .sidebarContainer
         .groupsContainer
         .commentArea.hidden
-            %button#closeComments Close
+            %i.fa.fa-times-circle-o#closeComments
             .commentsContainer
                 .castCommentsHeader
                 .castComments
@@ -201,12 +201,15 @@
         }
         $.getJSON(path,function(data){
             if(is_parent){
-                var elem = $('<div class="castComment" data-uuid="'+data.id+'">'+
-                        '<p class="castCommentParentHeader">'+data.title+'</p>'+
-                        '<p class="castCommentParentContent">'+data.content+'</p>'+
-                        '<p class="castCommentParentUser">'+data.user.name+'</p>'+
-                        '<p class="castCommentParentExpiration">'+findDaysLeft(data.expiration)+
-                            ' Days Remaining</p>'+
+                var elem = $('<div class="castParentComment" data-uuid="'+data.id+'">'+
+                        '<div class="castCommentParentProfileContainer">'+
+                            '<img class="castCommentParentAvatar" src="https://s3.amazonaws.com/social-circle-development/thesocialcircle.png"></img>'+
+                            '<p class="castCommentParentUser">'+data.user.name+'</p>'+
+                        '</div>'+
+                        '<div class="castCommentParentContentContainer">'+
+                            '<p class="castCommentParentHeader">'+data.title+'</p>'+
+                            '<p class="castCommentParentContent">'+data.content+'</p>'+
+                            '<p class="castCommentParentExpiration">'+findDaysLeft(data.expiration)+' Days Remaining</p>'+
                         '</div>');
                 $('.castCommentsHeader').append(elem);
             }else{
@@ -214,8 +217,13 @@
                     $('.castComments').empty();
                     $.each(data,function(index,val){
                         var elem = $('<div class="castComment" data-uuid="'+val.id+'">'+
-                            '<p class="castCommentChildContent">'+val.content+'</p>'+
-                            '<p class="castCommentChildUser">'+val.user.name+'</p>'+
+                            '<div class="castCommentChildProfileContainer">'+
+                                '<img class="castCommentChildAvatar" src="https://s3.amazonaws.com/social-circle-development/thesocialcircle.png"></img>'+
+                                '<p class="castCommentChildUser">'+val.user.name+'</p>'+
+                            '</div>'+
+                            '<div class="castCommentChildContentContainer">'+
+                                '<p class="castCommentChildContent">'+val.content+'</p>'+
+                                '<p class="castCommentChildDate">'+val.created_at+'</p>'+
                             '</div>');
                         $('.castComments').append(elem);
                     })

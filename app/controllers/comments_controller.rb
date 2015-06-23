@@ -26,7 +26,7 @@ class CommentsController < ApplicationController
     @comment.cast = @cast
     @comment.user = current_user
     if @comment.save
-      redirect_to user_path(current_user), notice: "Your comment has been published"
+      redirect_to user_path(current_user)
     else
       flash.alert = "Your comment could not be published. Please correct the errors below."
       render "posts/show"
