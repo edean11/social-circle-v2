@@ -5,8 +5,6 @@ class User < ActiveRecord::Base
   has_many :comments, dependent: :destroy
   authenticates_with_sorcery!
 
-  attr_accessor :avatar
-
   mount_uploader :avatar, AvatarUploader
 
   validates :email, :name, presence: true
@@ -15,4 +13,5 @@ class User < ActiveRecord::Base
   validates :email, format: { with: /.+@.+\..+/, message: "must be an email address" }, uniqueness: true
   validates :password, confirmation: true
   validates :password, :password_confirmation, presence: { on: :create }
+
 end

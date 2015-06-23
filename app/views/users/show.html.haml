@@ -136,7 +136,6 @@
           hideCloseButton: true,
           backgroundClassName: 'infoBubble',
           arrowSize: 0,
-          maxHeight: 40,
           minWidth: 160,
           maxWidth: 160
         });
@@ -181,7 +180,7 @@
                 if(lastRefreshCastIds.indexOf(cast.id)===-1){
                     //determine latLng
                     var latLng = new google.maps.LatLng(cast.lat,cast.lon);
-                    var infowindow = makeInfoWindow(cast);
+                    var infowindow = makeInfoBubble(cast,mapArr[0],latLng);
                     //attach markers and info windows to map
                     var color = findMarkerColor(cast.expiration);
                     populateMarker(latLng,mapArr[0],infowindow,cast.id,color);
@@ -313,7 +312,7 @@
             populateMarkers("#{root_url}/casts.json?search_title="+searchVal,mapArr[0]);
         }else if(selectedType==='Content'){
             populateMarkers("#{root_url}/casts.json?search_content="+searchVal,mapArr[0]);
-        }else if(selectedType==='Users'){
+        }else if(selectedType==='User'){
             populateMarkers("#{root_url}/casts.json?search_user="+searchVal,mapArr[0]);
         }else{console.log('invalid search')}
     }
@@ -328,12 +327,11 @@
     //////////////////////////////////////////////
 
     function populateSubscribedGroups(){
-        var myCastsElem = $('<div class="groupContainer" data-uuid="'+userId+'"><p class="groupName">'+
-                "#{@user.name}"+'</p></div>')
+        var myCastsElem = $('<div class="groupContainer" data-uuid="'+userId+'"><img class="groupContainerAvatar" src="#{@user.avatar.url}"></img><p class="groupName">'+"#{@user.name}"+'</p></div>')
         $('.groupsContainer').append(myCastsElem);
         $.getJSON("#{user_groups_path(@user)}",function(data) {
             $.each(data,function(index,group){
-                var elem = $('<div class="groupContainer" data-uuid="'+group.id+'"><p class="groupName">'+
+                var elem = $('<div class="groupContainer" data-uuid="'+group.id+'"><img class="groupContainerAvatar" src="'+group.picture.url+'"></img><p class="groupName">'+
                 group.name+'</p></div>')
                 $('.groupsContainer').append(elem);
             });

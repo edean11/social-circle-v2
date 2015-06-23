@@ -25,7 +25,6 @@ class GroupsController < ApplicationController
   def create
     @group = current_user.groups.build(group_params)
     if @group.save
-      # binding.pry
       message = "Group Created Successfully!"
       redirect_to user_path(current_user), notice: message
     else
@@ -46,6 +45,6 @@ class GroupsController < ApplicationController
   protected
 
   def group_params
-    params.require(:group).permit(:name, :description, :avatar)
+    params.require(:group).permit(:name, :description, :picture)
   end
 end

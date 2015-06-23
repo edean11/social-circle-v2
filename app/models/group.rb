@@ -6,6 +6,8 @@ class Group < ActiveRecord::Base
   validates :name, presence: true, length: { maximum: 30 }, uniqueness: true
   default_scope -> { order(created_at: :desc) }
 
+  mount_uploader :picture, AvatarUploader
+
   def self.unsubscribed_groups(id)
     groups = Group.joins(:subscriptions)
     output = groups.where.not(subscriptions: { user_id: id })
