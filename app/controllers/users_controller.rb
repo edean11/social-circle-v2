@@ -47,10 +47,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     @user.avatar = params[:user][:avatar]
     if @user.save
-      binding.pry
       auto_login(@user)
-      # uploader = AvatarUploader.new
-      # uploader.store!(@user.avatar)
       redirect_to user_path(@user), :notice => "Welcome, #{@user.name}"
     else
       flash.alert = "Please fix the errors below to continue."

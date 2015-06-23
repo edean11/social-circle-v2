@@ -4,9 +4,10 @@ class User < ActiveRecord::Base
   has_many :groups, through: :subscriptions, inverse_of: :users
   has_many :comments, dependent: :destroy
   authenticates_with_sorcery!
-  mount_uploader :avatar, AvatarUploader
 
   attr_accessor :avatar
+
+  mount_uploader :avatar, AvatarUploader
 
   validates :email, :name, presence: true
   validates :name, length: { minimum: 3 }, uniqueness: true
