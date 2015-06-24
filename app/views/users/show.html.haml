@@ -337,11 +337,22 @@
         });
     }
 
+    function removeGroupHighlights(){
+        $('.groupContainer').each(function(index,group){
+            $(group).css('border','2px solid black')
+        })
+    }
+
+    function highlightGroup(e){
+        $(e.target).parent().css('border','5px solid steelblue');
+    }
+
     function handleGroupClick(e){
         var uuid = $(e.target).attr('data-uuid') || $(e.target).parent().attr('data-uuid');
         if(uuid){
+            removeGroupHighlights();
+            highlightGroup(e);
             var groupName = $(e.target).text() || $(e.target).parent().text();
-            console.log($(e.target).parent());
             if(groupName===userName){
                 $('#circleHeader').text(groupName+"'s Circle");
                 populateMarkers("#{root_url}/users/"+uuid+"/casts.json",mapArr[0]);
