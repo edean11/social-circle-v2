@@ -151,7 +151,7 @@
           lastRefreshedCasts = [];
           lastRefreshedCasts.push(data);
           removeAllMarkersFromMap();
-          //loop through all owned markers and append
+          //loop through all markers and append
           $.each(data,function(index,cast){
             //determine latLng
             var latLng = new google.maps.LatLng(cast.lat,cast.lon);

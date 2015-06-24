@@ -12,7 +12,7 @@ class CastsController < ApplicationController
       @casts = Cast.where('content LIKE ?', "%#{params[:search_content]}%")
     elsif params[:search_user]
       @id= User.where('name LIKE ?', "%#{params[:search_user]}%").pluck(:id)
-      @casts = Cast.find_by(user_id: @id[0])
+      @casts = Cast.where(user_id: @id[0])
     else
       @casts = Cast.all
     end
