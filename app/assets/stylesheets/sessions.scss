@@ -2,6 +2,20 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.flash-alert{
+    width: 40%;
+    margin: 20px auto;
+}
+
+.flash-notice{
+    position: absolute;
+    top: 0;
+    left: 45%;
+    background-color: darken(white,1%);
+    padding: 5px;
+    font-size: 0.6em;
+}
+
 .home-logo img{
     width: 600px;
     margin: 20px 0;

@@ -16,7 +16,7 @@
     function makeRemoveSubscriptionElem(group){
         var elem = '<div class="subscriptionContainer '+group.id+'Subscription">'+
                         '<div class="subscriptionImageContainer">'+
-                        '<img class="subscriptionImage '+group.id+'SubscriptionImg" src="https://s3.amazonaws.com/social-circle-development/thesocialcircle.png"></img>'+
+                        '<img class="subscriptionImage '+group.id+'SubscriptionImg" src="'+group.picture.url+'"></img>'+
                         '</div>'+
                         '<div class="subscriptionContentContainer">'+
                         '<p class="subscriptionHeader '+group.id+'SubscriptionHeader">'+group.name+'</p>'+
@@ -64,7 +64,7 @@
     function makeNewSubscriptionElem(group){
         var elem = $('<div class="subscriptionContainer '+group.id+'Subscription">'+
                         '<div class="subscriptionImageContainer">'+
-                        '<img class="subscriptionImage '+group.id+'SubscriptionImg" src="https://s3.amazonaws.com/social-circle-development/thesocialcircle.png"></img>'+
+                        '<img class="subscriptionImage '+group.id+'SubscriptionImg" src="'+group.picture.url+'"></img>'+
                         '</div>'+
                         '<div class="subscriptionContentContainer">'+
                         '<p class="subscriptionHeader '+group.id+'SubscriptionHeader">'+group.name+'</p>'+

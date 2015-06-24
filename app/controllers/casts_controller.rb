@@ -37,6 +37,7 @@ class CastsController < ApplicationController
 
   def create
     @cast = current_user.casts.build(cast_params)
+    binding.pry
     @groups_ids = params[:cast][:group_ids]
     if @cast.save
       @groups_ids.each do |group_id|

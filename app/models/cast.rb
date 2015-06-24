@@ -10,4 +10,5 @@ class Cast < ActiveRecord::Base
   validates :lat, presence: true
   validates :lon, presence: true
   default_scope -> { order(created_at: :desc) }
+
 end

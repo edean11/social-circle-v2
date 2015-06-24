@@ -120,6 +120,19 @@ input.newCastGroups {
                 color: black;
             }
         }
+
+        #setChosenLocation{
+            margin-top: 20px;
+            background-color: lighten(black,30%);
+            color: darken(white,1%);
+            padding: 10px;
+            border: 1px solid black;
+            border-radius: 5px;
+            &:hover {
+                background-color: darken(white,1%);
+                color: lighten(black,30%);
+            }
+        }
     }
 
 }

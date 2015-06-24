@@ -10,6 +10,10 @@ function initialize() {
     // inline:true
   });
 
+  $('.newCastAttrHeader').click(function(){
+    console.log($('.datetimePicker').val());
+  })
+
   //set hidden field values for rails
   function setLatLng(position){
     $('#cast_lat').val(position.A);
