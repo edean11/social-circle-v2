@@ -8,15 +8,16 @@
 }
 
 .commentsContainer {
-    border: 2px solid black;
-    border-radius: 10px;
     width: 95%;
+    float: left;
+    margin-top: 20px;
 }
 
 #closeComments{
+    position: relative;
+    z-index: 100;
     font-size: 2em;
-    margin-left: 80%;
-    color: lighten(black,30%);
+    color: lighten(red,15%);
 
     &:hover {
         cursor: pointer;
@@ -58,149 +59,98 @@
 // PARENT COMMENTS //
 /////////////////////
 
-    .castParentComment {
-        width: 100%;
-        background-color: lightgrey;
+
+.castParentComment {
+    width: 100%;
+    margin-top: -50px;
+    img {
+        position: relative;
+        z-index: 50;
+        width: 100px;
+        border-radius: 50%;
         border: 1px solid black;
-        border-radius: 10px;
-        margin: 0 0 30px;
+        margin-left: 350px;
     }
-
-
-    .castCommentParentProfileContainer{
-        display: inline-block;
-        .castCommentParentAvatar{
-            position: relative;
-            background-color: white;
-            z-index: 90;
-            width: 75px;
-            height: 75px;
-            border: 1px solid black;
-            border-radius: 10px;
-            padding: 10px;
-        }
-
-        .castCommentParentUser{
-            position: relative;
-            z-index: 100;
-            background-color: white;
-            margin: 0;
-            margin-top: -10px;
-            text-align: center;
-            border: 1px solid black;
-            border-radius: 10px;
-        }
-    }
-
-    .castCommentParentHeader {
-        display: inline-block;
-        font-size: 1.2em;
-        font-weight: bold;
-        color: black;
-        text-decoration: underline;
+    p {
+        text-align: center;
         margin: 0;
+        font-size: 0.8em;
     }
+    .castCommentParentContentContainer{
+        position: relative;
+        margin-top: -40px;
+        background-color: lighten(black,20%);
+        border: 3px solid black;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+        color: white;
 
+        .castCommentParentHeader{
+            font-size: 1.2em;
+        }
 
-    .castCommentParentContentContainer {
-        width: 72%;
-        display: inline-block;
-        float: right;
-        font-size: 0.7em;
-        margin: 0;
-        padding: 10px;
-        border-radius: 15px;
-
-        .castCommentParentExpiration{
-            font-size: 0.7em;
-            float: right;
+        .castCommentParentUser,.castCommentParentExpiration{
+            display: inline-block;
+            margin: 10px;
+            font-size: 0.6em;
+            text-align: right;
         }
     }
+}
+
+
+
 
 ////////////////////
 // CHILD COMMENTS //
 ////////////////////
 
-    .castComment {
-        width: 80%;
-        height: 80px;
+.castComment {
+    width: 85%;
+    margin: 30px auto;
+    padding: 15px;
+    border: 2px solid black;
+    border-radius: 10px;
+    color: lighten(black,30%);
+    background-color: darken(white,1%);
+    font-size: 0.7em;
+    overflow: auto;
+
+    &:nth-child(2n){
+        color: darken(white,1%);
         background-color: lighten(black,30%);
+        .castCommentChildContentContainer{
+            float: none;
+        }
+        .castCommentChildProfileContainer{
+            float: right;
+        }
+    }
+
+    img {
+        width: 75px;
+        border-radius: 20%;
+        border: 1px solid black;
+    }
+    .castCommentChildProfileContainer,.castCommentChildContentContainer{
+        display: inline-block;
+    }
+
+    .castCommentChildContentContainer{
+        float: right;
+        width: 65%
+    }
+
+    .castCommentChildUser{
+        margin: 0;
+        position: relative;
+        z-index: 100;
+        padding: 5px;
         border: 1px solid black;
         border-radius: 10px;
-        margin: 45px 0;
-        margin-left: 35px;
-
-        &:last-child{
-            margin-bottom: 120px;
-        }
-
-        &:nth-child(2n){
-            background-color: white;
-            border: 1px solid lighten(black,30%);
-
-            .castCommentChildProfileContainer{
-                float: right;
-                margin-right: -20px;
-            }
-            .castCommentChildContentContainer{
-                float: left;
-                color: lighten(black,30%);
-                .castCommentChildContent{
-                    text-align: right;
-                }
-
-                .castCommentChildDate{
-                    font-size: 0.7em;
-                    float: left;
-                    margin-left: 20px;
-                }
-            }
-        }
+        text-align: center;
+        margin-top: -20px;
+        background-color: darken(white,1%);
+        color: lighten(black,30%);
     }
-
-    .castCommentChildProfileContainer{
-        display: inline-block;
-        margin-left: -20px;
-        margin-top: -10px;
-        .castCommentChildAvatar{
-            position: relative;
-            background-color: white;
-            z-index: 90;
-            width: 75px;
-            height: 75px;
-            border: 1px solid black;
-            border-radius: 50%;
-            padding: 10px;
-        }
-
-        .castCommentChildUser{
-            position: relative;
-            z-index: 100;
-            background-color: white;
-            margin: 0;
-            margin-top: -10px;
-            text-align: center;
-            border: 1px solid black;
-            border-radius: 10px;
-        }
-    }
-
-    .castCommentChildContentContainer {
-        width: 72%;
-        display: inline-block;
-        float: right;
-        color: white;
-        font-size: 0.9em;
-
-        .castCommentChildContent{
-        }
-
-        .castCommentChildDate{
-            font-size: 0.7em;
-            float: right;
-            margin-right: 20px;
-            margin-bottom: 20px;
-        }
-    }
-
-
+}

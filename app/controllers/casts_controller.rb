@@ -25,7 +25,7 @@ class CastsController < ApplicationController
     @cast = Cast.find(params[:id])
     respond_to do |format|
       format.json do
-        render :json => @cast.to_json(:include => { :user => { only: [:name,:id] } })
+        render :json => @cast.to_json(:include => { :user => { only: [:name,:id,:avatar] } })
       end
     end
   end

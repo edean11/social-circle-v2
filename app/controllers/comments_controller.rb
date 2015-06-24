@@ -11,7 +11,7 @@ class CommentsController < ApplicationController
     end
     respond_to do |format|
       format.json do
-        render :json => @comments.to_json(:include => { :user => { only: [:name,:id] } })
+        render :json => @comments.to_json(:include => { :user => { only: [:name,:id,:avatar] } })
       end
     end
   end

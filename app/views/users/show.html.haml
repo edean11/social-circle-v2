@@ -121,7 +121,6 @@
         var contentString = '<div class="castPopup '+cast.id+'Popup" id="cast.id">'+
                 '<p class=castTitle '+cast.id+'Title>'+cast.title+'</p>'+
                 '<p class=castContent '+cast.id+'Content>'+cast.content+'</p>'+
-                "<p class=castExpiration "+cast.id+"Expiration>"+findDaysLeft(cast.expiration)+" Days Left</p>"
                 '</div>'
         var infoBubble = new InfoBubble({
           map: map,
@@ -137,7 +136,8 @@
           backgroundClassName: 'infoBubble',
           arrowSize: 0,
           minWidth: 160,
-          maxWidth: 160
+          maxWidth: 160,
+          shadowStyle: 0
         });
         infoWindows.push(infoBubble);
         return infoBubble;
@@ -214,13 +214,11 @@
         $.getJSON(path,function(data){
             if(is_parent){
                 var elem = $('<div class="castParentComment" data-uuid="'+data.id+'">'+
-                        '<div class="castCommentParentProfileContainer">'+
-                            '<img class="castCommentParentAvatar" src="https://s3.amazonaws.com/social-circle-development/thesocialcircle.png"></img>'+
-                            '<p class="castCommentParentUser">'+data.user.name+'</p>'+
-                        '</div>'+
+                            '<img class="castCommentParentAvatar" src="'+data.user.avatar.url+'"></img>'+
                         '<div class="castCommentParentContentContainer">'+
                             '<p class="castCommentParentHeader">'+data.title+'</p>'+
                             '<p class="castCommentParentContent">'+data.content+'</p>'+
+                            '<p class="castCommentParentUser">Owner: '+data.user.name+'</p>'+
                             '<p class="castCommentParentExpiration">'+findDaysLeft(data.expiration)+' Days Remaining</p>'+
                         '</div>');
                 $('.castCommentsHeader').append(elem);
@@ -230,7 +228,7 @@
                     $.each(data,function(index,val){
                         var elem = $('<div class="castComment" data-uuid="'+val.id+'">'+
                             '<div class="castCommentChildProfileContainer">'+
-                                '<img class="castCommentChildAvatar" src="https://s3.amazonaws.com/social-circle-development/thesocialcircle.png"></img>'+
+                                '<img class="castCommentChildAvatar" src="'+val.user.avatar.url+'"></img>'+
                                 '<p class="castCommentChildUser">'+val.user.name+'</p>'+
                             '</div>'+
                             '<div class="castCommentChildContentContainer">'+
@@ -330,12 +328,28 @@
         var myCastsElem = $('<div class="groupContainer" data-uuid="'+userId+'"><img class="groupContainerAvatar" src="#{@user.avatar.url}"></img><p class="groupName">'+"#{@user.name}"+'</p></div>')
         $('.groupsContainer').append(myCastsElem);
         $.getJSON("#{user_groups_path(@user)}",function(data) {
+            //and if statement for adding 'no comments' elem
             $.each(data,function(index,group){
-                var elem = $('<div class="groupContainer" data-uuid="'+group.id+'"><img class="groupContainerAvatar" src="'+group.picture.url+'"></img><p class="groupName">'+
+                var elem = $('<div class="groupContainer" data-group="'+group.name+'" data-uuid="'+group.id+'"><img class="groupContainerAvatar" src="'+group.picture.url+'" data-src="'+group.id+'" data-val="'+group.name+'"></img><p class="groupName">'+
                 group.name+'</p></div>')
                 $('.groupsContainer').append(elem);
             });
         });
+    }
+
+    function handleGroupClick(e){
+        var uuid = $(e.target).attr('data-uuid') || $(e.target).parent().attr('data-uuid');
+        if(uuid){
+            var groupName = $(e.target).text() || $(e.target).parent().text();
+            console.log($(e.target).parent());
+            if(groupName===userName){
+                $('#circleHeader').text(groupName+"'s Circle");
+                populateMarkers("#{root_url}/users/"+uuid+"/casts.json",mapArr[0]);
+            }else{
+                $('#circleHeader').text(groupName+" Circle");
+                populateMarkers("#{root_url}/groups/"+uuid+"/casts.json",mapArr[0]);
+            }
+        }
     }
 
     function setCenter(position){
@@ -375,16 +389,10 @@
       populateSubscribedGroups();
       addMyLocationListener();
       $('.groupsContainer').click('.groupContainer',function(e){
-        if($(e.target).attr('data-uuid')){
-            var groupName = $(e.target).children()[0].innerHTML;
-            if(groupName===userName){
-                $('#circleHeader').text(groupName+"'s Circle");
-                populateMarkers("#{root_url}/users/"+$(e.target).attr('data-uuid')+"/casts.json",mapArr[0]);
-            }else{
-                $('#circleHeader').text(groupName+" Circle");
-                populateMarkers("#{root_url}/groups/"+$(e.target).attr('data-uuid')+"/casts.json",mapArr[0]);
-            }
-        }
+        handleGroupClick(e);
+      })
+      $('.groupContainerAvatar').click(function(e){
+        handleGroupClick(e);
       })
     }
     google.maps.event.addDomListener(window, 'load', initialize);

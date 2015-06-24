@@ -13,10 +13,11 @@ $linkWedgeSize: 200px;
 
 body {
     list-style: none;
+    background-color: darken(white,1%);
 }
 
 .nav-container {
-    background-color: lighten(black,30%);
+    background-color: lighten(black,20%);
     border-top: 1px solid black;
     border-bottom: 1px solid black;
 }
@@ -65,7 +66,7 @@ body {
     z-index: 100;
     margin-top: 20px;
     margin-left: 20px;
-    color: lighten(black,30%);
+    color: lighten(black,20%);
     font-size: 4em;
     text-decoration: none;
     &:hover {
@@ -93,15 +94,17 @@ body {
 // Sidebar Styles
 
 .sidebarContainer {
-    width: 42%;
+    width: 40%;
     display: inline-block;
     float: right;
+    margin-right: 25px;
 }
 
 .groupsContainer{
     padding: 10px;
     height: 500px;
     overflow: auto;
+    background-image: url();
     .groupContainer {
         display: inline-block;
         text-align: center;
@@ -127,7 +130,7 @@ body {
     bottom: 0;
     right: 2%;
     width: 40%;
-    background-color: lighten(black,30%);
+    background-color: lighten(black,20%);
     color: white;
     padding: 10px;
     border: 1px solid black;
@@ -162,6 +165,21 @@ body {
 
 #searchType option{
     font-size: 30px;
+}
+
+// Cast Popup Styles
+
+.castPopup{
+    padding: 1px;
+    .castTitle{
+        font-size: 1.2em;
+        font-weight: bold;
+        color: white;
+        margin: 5px;
+    }
+    .castContent{
+        color: black;
+    }
 }
 
 // Cast Click Animations
