@@ -63,7 +63,6 @@
           animation: google.maps.Animation.DROP
         });
         marker.set("id", cast_id);
-        map.panTo(position);
         google.maps.event.addListener(marker, 'click', function(e) {
           closeAllInfoWindows();
           infowindow.open(map,marker);
@@ -86,6 +85,15 @@
         }
         markers = [];
     }
+    function removeMarker(marker_id){
+        $.each(markers,function(index,marker){
+        console.log('markers',marker,marker_id,marker.id);
+            if(marker.id===marker_id){
+                marker.setMap(null);
+                marker = null;
+            }
+        })
+    }
     function closeAllInfoWindows() {
         for (var i=0;i<infoWindows.length;i++) {
           infoWindows[i].close();
@@ -94,14 +102,14 @@
     function findDaysLeft(expiration){
         var now = new Date();
         var exp = Date.parse(expiration);
-        var daysleft = parseFloat(((exp - now)/1000)*(1/86400)).toFixed(2);
+        var daysleft = parseFloat(((exp - now)/1000)*(1/86400)).toFixed(3);
         return daysleft;
     }
 
     function findMarkerColor(expiration){
         var daysleft = findDaysLeft(expiration);
         var color;
-        if(daysleft<0){
+        if(daysleft<=0){
             color = 'expired'
         }else if(daysleft<0.05){
             color = 'FA334F'
@@ -160,23 +168,29 @@
             var color = findMarkerColor(cast.expiration);
             if(color==='expired'){
                 deleteMarker(cast.id);
-
             }else{
                 populateMarker(latLng,map,infoBubble,cast.id,color);
                 lastRefreshCastIds.push(cast.id);
             }
           });
-      })
+        });
+        var userLat = "#{current_user.home_lat}"
+        var userLon = "#{current_user.home_lon}"
+        var userLatLng = new google.maps.LatLng(userLat,userLon);
+        map.panTo(userLatLng);
     }
 
     function updateMarkers(){
         $.getJSON(lastUsedPath[0],function(data){
             var newCastIds = [];
-            lastRefreshedCasts = [];
-            lastRefreshedCasts.push(data);
             //populate new casts
             $.each(data,function(index,cast){
-                newCastIds.push(cast.id)
+                var color = findMarkerColor(cast.expiration);
+                if(color==='expired'){
+                    deleteMarker(cast.id);
+                }else{
+                    newCastIds.push(cast.id);
+                }
                 if(lastRefreshCastIds.indexOf(cast.id)===-1){
                     //determine latLng
                     var latLng = new google.maps.LatLng(cast.lat,cast.lon);
@@ -186,15 +200,19 @@
                     populateMarker(latLng,mapArr[0],infowindow,cast.id,color);
                     lastRefreshCastIds.push(cast.id);
                 }
-            })
-            //remove expired casts
+            });
+            //remove expired casts from map
+            console.log(lastRefreshedCasts[0],newCastIds)
             $.each(lastRefreshedCasts[0],function(index,cast){
                 if(newCastIds.indexOf(cast.id)===-1){
-                    deleteMarker(cast.id);
-                    var ind = lastRefreshedCastIds.indexOf(cast.id);
-                    lastRefreshedCastIds.splice(ind,1)
+                    console.log(cast.id);
+                    removeMarker(cast.id);
+                    var ind = lastRefreshCastIds.indexOf(cast.id);
+                    lastRefreshCastIds.splice(ind,1);
                 }
-            })
+            });
+            lastRefreshedCasts = [];
+            lastRefreshedCasts.push(data);
         })
     }
 
@@ -387,8 +405,11 @@
     function initialize() {
       if(!($('#map').length)){return}
       //insert rails variables here
+      var userLat = "#{current_user.home_lat}"
+      var userLon = "#{current_user.home_lon}"
+      console.log(userLat,userLon);
       var mapOptions = {
-        center: { lat: parseFloat(-25.363882), lng: parseFloat(131.044922)},
+        center: { lat: parseFloat(userLat), lng: parseFloat(userLon)},
         zoom: 12,
         disableDefaultUI: true
       };

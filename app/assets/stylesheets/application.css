@@ -16,6 +16,15 @@
  *= require_self
  */
 
+ body {
+    font-family: 'Raleway', sans-serif;
+ }
+
+ .newCastHeader,.newGroupHeader,.newSubscriptionTitle,.existingSubscriptionsHeader,
+ .availableSubscriptionsHeader, #circleHeader{
+    font-family: 'Oswald', sans-serif;
+ }
+
  .hidden {
     display: none;
  }

@@ -1,3 +1,5 @@
+require 'time'
+
 class CastsController < ApplicationController
   def index
     if params[:user_id]
@@ -37,7 +39,6 @@ class CastsController < ApplicationController
 
   def create
     @cast = current_user.casts.build(cast_params)
-    binding.pry
     @groups_ids = params[:cast][:group_ids]
     if @cast.save
       @groups_ids.each do |group_id|
@@ -61,6 +62,7 @@ class CastsController < ApplicationController
   protected
 
   def cast_params
-    params.require(:cast).permit(:title, :content, :expiration, :lat, :lon, :group_ids)
+    params[:cast][:expiration] = Time.parse(params[:cast][:expiration].to_s+" "+params[:cast][:time_offset]).utc
+    params.require(:cast).permit(:title, :content, :expiration, :lat, :lon, :group_ids, :time_offset)
   end
 end

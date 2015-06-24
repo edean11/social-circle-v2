@@ -82,7 +82,7 @@
     background-color: lightgrey;
     border-radius: 10px;
     width: 50%;
-    height: 350px;
+    height: 550px;
     margin: 20px auto;
     text-align: center;
     padding: 10px;
@@ -102,7 +102,7 @@
     }
 
     #user_avatar {
-        margin: 10px auto 150px;
+        margin: 10px auto;
     }
 
     .signUpLeft {
@@ -122,10 +122,37 @@
         border: 1px solid black;
         border-radius: 5px;
         display: block;
-        margin: 0 auto;
+        margin: 100px auto 0;
 
         &:hover {
             background-color: limegreen;
         }
+    }
+
+    #placeUserLocMap{
+        height: 250px;
+        width: 250px;
+        border: 2px solid black;
+        border-radius: 50%;
+        margin: 0 auto;
+    }
+
+    #setCurrentLocationUser{
+        padding: 10px;
+        background-color: lighten(black, 30%);
+        border: 1px solid black;
+        border-radius: 5px;
+        display: block;
+        margin: 10px auto;
+        color: darken(white,1%);
+
+        &:hover {
+            background-color: darken(white,1%);
+            color: lighten(black, 30%);
+        }
+    }
+
+    .newUserLocCaption{
+        font-size: 0.8em;
     }
  }
