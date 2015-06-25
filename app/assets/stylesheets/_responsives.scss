@@ -84,6 +84,13 @@
     }
 }
 
+@media (max-width: 1050px) {
+    //New Subscription
+    .subscriptionContainer{
+        width: 90%;
+    }
+}
+
 @media (max-width: 950px){
     .newGroupContainer{
         #group_description {
