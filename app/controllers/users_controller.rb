@@ -34,7 +34,11 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     @now = Time.current()
     respond_to do |format|
-      format.html { render 'show'}
+      if current_user===@user
+        format.html { render 'show'}
+      else
+        format.html { redirect_to user_path(current_user)}
+      end
       format.json { render json: @user}
     end
   end
