@@ -5,10 +5,16 @@
         .signUpLeft
             = f.input :name
             = f.input :email
-            = f.input :default_zip, label: "Default Zip"
             = f.input :password
             = f.input :password_confirmation
+            = f.button :submit, "Save Changes"
         .signUpRight
             %p.avatar-label Avatar
             = f.file_field :avatar, label: "Upload Your User Avatar"
-            = f.button :submit, "Save Changes"
+            = f.input :home_lat, :as => :hidden
+            = f.input :home_lon, :as => :hidden
+            .newUserLocationContainer
+                %p.newUserLocationHeader Location
+                %p.newUserLocCaption Choose a Default Location for this user by clicking somewhere on the map below or clicking 'Set Current Location'
+                #placeUserLocMap
+                %button#setCurrentLocationUser{:type => "button"} Set Current Location

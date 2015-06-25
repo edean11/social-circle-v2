@@ -2,6 +2,24 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.endNewSubscription{
+    display: inline-block;
+    background-color: lighten(black,30%);
+    color: darken(white,1%);
+    border: 1px solid black;
+    border-radius: 5px;
+    width: 125px;
+    margin-left: 80%;
+    margin-right: auto;
+    padding: 10px;
+    text-align: center;
+    text-decoration: none;
+    &:hover{
+        background-color: darken(white,1%);
+        color: lighten(black,30%);
+    }
+}
+
 .newSubscriptionTitle {
     text-align: center;
     font-size: 3em;

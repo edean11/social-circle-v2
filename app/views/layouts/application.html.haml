@@ -20,6 +20,7 @@
           .logo.nav-link= link_to image_tag('thesocialcircle.png'), root_path
           = link_to content_tag(:i,nil, class: 'fa fa-sign-out right-nav-link'), user_session_path, method: :delete
           = link_to content_tag(:i,nil, class: 'fa fa-user right-nav-link'), edit_user_path(current_user)
+          %i.fa.fa-search.right-nav-link#search-icon
       %section#content
         - flash.each do |key, message|
           %div{ class: "flash-#{key}" }= message

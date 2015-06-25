@@ -1,0 +1,187 @@
+
+
+@media (max-width: 1170px) {
+    //Main Page
+    .sidebarContainer{
+        float: none;
+        display: block;
+        width: 80%;
+        margin: 20px auto;
+    }
+    #map{
+        display: block;
+        margin: 5px auto;
+    }
+    #subscriptionIconLink {
+        right: 20px;
+    }
+
+    #myLocationButton {
+        right: 20px;
+    }
+
+    .searchArea{
+        display: none;
+    }
+
+    #search-icon{
+        display: inline-block;
+    }
+
+    //Sign Up / Edit Profile
+    .signUpContainer{
+        width: 75%;
+        height: 950px;
+        .signUpRight{
+            float: none;
+            display: block;
+            margin: 20px auto;
+        }
+        .btn{
+            position: absolute;
+            bottom: -60%;
+            left: 40%;
+        }
+        .user_name,.user_password,.user_password_confirmation,.user_email{
+            input{
+                width: 150%;
+                margin-left: -25%;
+            }
+        }
+        #placeUserLocMap{
+            text-align: center;
+        }
+    }
+
+    //New Cast
+    .newCastContentContainer{
+        .newCastAttrContainer,.newCastGroupsContainer,.newCastLocationContainer{
+            display: block;
+            width: 70%;
+        }
+
+        .newCastGroupsContainer{
+            float: none;
+        }
+
+        .newCastLocationContainer{
+        }
+
+        .newCastAttrHeader, label.check_boxes, .newCastLocationHeader{
+            margin: 20px auto;
+            position: relative;
+        }
+    }
+}
+
+@media (max-width: 950px){
+    .newGroupContainer{
+        #group_description {
+            width: 90%;
+        }
+    }
+
+    #placeCastMap{
+        width: 350px;
+        height: 350px;
+    }
+}
+
+@media (max-width: 650px) {
+    //Main Page
+    #map{
+        width: 450px;
+        height: 450px;
+    }
+    #circleHeader{
+        width: 200px;
+        padding: 5px;
+    }
+    #groupIconLink {
+        margin-top: 400px;
+    }
+
+    #myLocationButton {
+        margin-top: 400px;
+    }
+
+    //New Group
+    .newGroupContainer{
+        width: 60%;
+        .group_description,.group_name,#group_picture,.btn {
+            display: block;
+        }
+    }
+
+    //New Cast
+    .newCastContentContainer{
+        .newCastAttrHeader, label.check_boxes, .newCastLocationHeader{
+            font-size: 0.7em;
+            width: 200px;
+        }
+    }
+
+    #placeCastMap{
+        width: 200px;
+        height: 200px;
+    }
+}
+
+@media (max-width: 480px) {
+    //Main Page
+    .sidebarContainer{
+        width: 90%;
+        margin: 10px auto;
+    }
+    #castIconLink, #groupIconLink, #subscriptionIconLink, #myLocationButton{
+        font-size: 3em;
+    }
+    #map{
+        width: 350px;
+        height: 350px;
+    }
+    #circleHeader{
+        width: 150px;
+    }
+    #groupIconLink {
+        margin-top: 315px;
+    }
+
+    #myLocationButton {
+        margin-top: 315px;
+    }
+    .groupsContainer{
+        .groupContainer{
+            width: 60px;
+            height: 60px;
+            img.groupContainerAvatar{
+                width: 60px;
+            }
+        }
+    }
+
+    //Comments
+    .castParentComment {
+        img{
+            width: 75px;
+        }
+    }
+
+    //Sign Up / Edit Profile
+    .signUpContainer{
+        width: 85%;
+        height: 950px;
+        .user_name,.user_password,.user_password_confirmation,.user_email{
+            input{
+                width: 190%;
+                margin-left: -45%;
+            }
+        }
+        #placeUserLocMap{
+            margin-left: -50px;
+        }
+        .btn{
+            left: 35%;
+        }
+    }
+}

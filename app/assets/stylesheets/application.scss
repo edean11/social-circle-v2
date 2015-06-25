@@ -1,0 +1,24 @@
+ /*
+ *= require normalize
+ *= require jquery.datetimepicker
+ *= require_tree .
+ *= require_self
+ */
+ @import 'responsives';
+
+ body {
+    font-family: 'Raleway', sans-serif;
+ }
+
+ .newCastHeader,.newGroupHeader,.newSubscriptionTitle,.existingSubscriptionsHeader,
+ .availableSubscriptionsHeader, #circleHeader, article .signInHeader, .signUpHeader{
+    font-family: 'Oswald', sans-serif;
+ }
+
+ .hidden {
+    display: none;
+ }
+
+ .logo img{
+    width: 100px;
+ }

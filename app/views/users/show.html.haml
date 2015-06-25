@@ -8,7 +8,6 @@
     .sidebarContainer
         .groupsContainer
         .commentArea.hidden
-            %i.fa.fa-times-circle-o#closeComments
             .commentsContainer
                 .castCommentsHeader
                 .castComments
@@ -87,7 +86,6 @@
     }
     function removeMarker(marker_id){
         $.each(markers,function(index,marker){
-        console.log('markers',marker,marker_id,marker.id);
             if(marker.id===marker_id){
                 marker.setMap(null);
                 marker = null;
@@ -202,10 +200,8 @@
                 }
             });
             //remove expired casts from map
-            console.log(lastRefreshedCasts[0],newCastIds)
             $.each(lastRefreshedCasts[0],function(index,cast){
                 if(newCastIds.indexOf(cast.id)===-1){
-                    console.log(cast.id);
                     removeMarker(cast.id);
                     var ind = lastRefreshCastIds.indexOf(cast.id);
                     lastRefreshCastIds.splice(ind,1);
@@ -232,6 +228,7 @@
         $.getJSON(path,function(data){
             if(is_parent){
                 var elem = $('<div class="castParentComment" data-uuid="'+data.id+'">'+
+                            '<i class="fa fa-times-circle-o" id="closeComments"></i>'+
                             '<img class="castCommentParentAvatar" src="'+data.user.avatar.url+'"></img>'+
                         '<div class="castCommentParentContentContainer">'+
                             '<p class="castCommentParentHeader">'+data.title+'</p>'+
@@ -240,6 +237,7 @@
                             '<p class="castCommentParentExpiration">'+findDaysLeft(data.expiration)+' Days Remaining</p>'+
                         '</div>');
                 $('.castCommentsHeader').append(elem);
+                addCloseCommentsListener();
             }else{
                 if(lastCommentRefreshLength!==Object.keys(data).length || is_new){
                     $('.castComments').empty();
@@ -251,7 +249,7 @@
                             '</div>'+
                             '<div class="castCommentChildContentContainer">'+
                                 '<p class="castCommentChildContent">'+val.content+'</p>'+
-                                '<p class="castCommentChildDate">'+val.created_at+'</p>'+
+                                '<abbr class="castCommentChildDate timeago" title="'+val.created_at+'">'+$.timeago(val.created_at)+'</abbr>'+
                             '</div>');
                         $('.castComments').append(elem);
                     })
@@ -285,20 +283,21 @@
         refreshCommentsInterval = setInterval(updateComments,5000);
     }
 
-    $('#closeComments').click(function(){
-        $('.commentArea').addClass('hidden');
-        $('.groupsContainer').removeClass('hidden');
-        $('.searchArea').removeClass('hidden');
-        clearInterval(refreshCommentsInterval);
-        closeAllInfoWindows();
-    });
+    function addCloseCommentsListener(){
+        $('#closeComments').click(function(){
+            $('.commentArea').addClass('hidden');
+            $('.groupsContainer').removeClass('hidden');
+            $('.searchArea').removeClass('hidden');
+            clearInterval(refreshCommentsInterval);
+            closeAllInfoWindows();
+        });
+    }
 
     function postComment(cast_ID){
         var commentVal = $('#commentInput').val();
         if(commentVal!==''){
             $.post("#{comments_path}", { content: commentVal, user_id: "#{current_user}", cast_id: cast_ID },
                 function(data){
-                    console.log('posted:'+data);
                 },'json');
         }else{
             console.log("Please enter a comment in order to submit");
@@ -404,10 +403,10 @@
 
     function initialize() {
       if(!($('#map').length)){return}
-      //insert rails variables here
       var userLat = "#{current_user.home_lat}"
       var userLon = "#{current_user.home_lon}"
-      console.log(userLat,userLon);
+      //initialize timeago
+      $("abbr.timeago").timeago();
       var mapOptions = {
         center: { lat: parseFloat(userLat), lng: parseFloat(userLon)},
         zoom: 12,
@@ -417,7 +416,6 @@
         mapOptions);
       mapArr.push(map);
       populateMarkers("#{user_casts_path(@user)}",map)
-      var refreshCastInterval = setInterval(updateMarkers,5000);
       populateSubscribedGroups();
       addMyLocationListener();
       $('.groupsContainer').click('.groupContainer',function(e){
@@ -426,7 +424,37 @@
       $('.groupContainerAvatar').click(function(e){
         handleGroupClick(e);
       })
+      var refreshCastInterval = setInterval(updateMarkers,15000);
     }
     google.maps.event.addDomListener(window, 'load', initialize);
+
+
+
+    //////////////////////////////////////////////
+    ///////////// Responsive Search //////////////
+    //////////////////////////////////////////////
+
+    var searching = false;
+
+    $('#search-icon').click(function(){
+        if(searching){
+            $('.searchArea').css('display','none');
+            searching = false;
+        }else{
+            $('.searchArea').css('display','block');
+            $('.searchArea').css('position','fixed');
+            $('.searchArea').css('bottom','0');
+            $('.searchArea').css('width','100%');
+            $('.searchArea').css('padding','0');
+            $('.searchHeader').css('display','block');
+            $('.searchHeader').css('text-align','center');
+            $('.searchHeader').css('margin','0');
+            $('#searchType').css('margin-left','60px');
+            $('.submitSearch').css('float','none');
+            $('.submitSearch').css('display','block');
+            $('.submitSearch').css('margin','2px auto');
+            searching = true;
+        }
+    })
 
 

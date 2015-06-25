@@ -14,4 +14,5 @@
 //= require jquery_ujs
 //= require jquery.datetimepicker
 //= require infobubble
+//= require timeago
 //= require_tree .

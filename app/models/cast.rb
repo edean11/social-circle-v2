@@ -5,8 +5,8 @@ class Cast < ActiveRecord::Base
   has_many :comments, dependent: :destroy
 
   validates :user_id, presence: true
-  validates :title, presence: true, length: { maximum: 100 }
-  validates :content, presence: true
+  validates :title, presence: true, length: { maximum: 40 }
+  validates :content, presence: true, length: { maximum: 120 }
   validates :time_offset, presence: true
   validates :lat, presence: true
   validates :lon, presence: true

@@ -35,6 +35,13 @@ body {
     }
 }
 
+#search-icon{
+    display: none;
+    &:hover {
+        cursor: pointer;
+    }
+}
+
 #circleHeader {
     background-color: darkgrey;
     color: black;

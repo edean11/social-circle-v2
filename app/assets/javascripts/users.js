@@ -24,7 +24,7 @@ function initializeUserMap() {
   //place cast map
   var placeUserMapOptions = {
     center: { lat: 36.16182004637161, lng: -86.78950309753418},
-    zoom: 6,
+    zoom: 2,
     disableDefaultUI: true
   };
   function placeUserMarker(position, map) {
@@ -59,7 +59,7 @@ function initializeUserMap() {
     var lat = position.coords.latitude;
     var lng = position.coords.longitude;
     var pos = new google.maps.LatLng(lat, lng);
-    placeUserMarker(pos,placeMap);
+    placeUserMarker(pos,placeUserMap);
     placeUserMap.setCenter(new google.maps.LatLng(lat, lng));
   }
 

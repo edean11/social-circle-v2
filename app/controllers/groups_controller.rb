@@ -8,7 +8,6 @@ class GroupsController < ApplicationController
       @groups = Group.all
     end
     respond_to do |format|
-      # format.json { render json: @groups}
       format.json do
         render :json => @groups.to_json(:include => { :subscriptions => { only: [:user_id,:id] } })
       end
