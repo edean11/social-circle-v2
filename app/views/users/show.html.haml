@@ -295,7 +295,7 @@
 
     function postComment(cast_ID){
         var commentVal = $('#commentInput').val();
-        if(commentVal!==''){
+        if(commentVal!=='' && commentVal.indexOf('script')===-1){
             $.post("#{comments_path}", { content: commentVal, user_id: "#{current_user}", cast_id: cast_ID },
                 function(data){
                 },'json');
