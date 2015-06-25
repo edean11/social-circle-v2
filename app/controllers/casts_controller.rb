@@ -1,4 +1,4 @@
-require 'time'
+require 'date'
 
 class CastsController < ApplicationController
   def index
@@ -62,9 +62,11 @@ class CastsController < ApplicationController
   protected
 
   def cast_params
-    test = Time.parse(params[:cast][:expiration].to_s+" "+params[:cast][:time_offset])
-    params[:cast][:expiration] = Time.parse(params[:cast][:expiration].to_s+" "+params[:cast][:time_offset]).utc
-    binding.pry
+    zone = params[:cast][:time_offset]
+    dt = params[:cast][:expiration]
+    full_date = dt+" "+zone
+    d = DateTime.strptime(full_date, '%Y/%m/%d %H:%M %z')
+    params[:cast][:expiration] = d
     params.require(:cast).permit(:title, :content, :expiration, :lat, :lon, :group_ids, :time_offset)
   end
 end

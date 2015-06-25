@@ -22,6 +22,7 @@ class CommentsController < ApplicationController
 
   def create
     @cast = Cast.find(params[:cast_id])
+    params[:content] = CGI::escapeHTML(params[:content])
     @comment = Comment.new(params.permit(:content, :user_id, :cast_id))
     @comment.cast = @cast
     @comment.user = current_user

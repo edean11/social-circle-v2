@@ -27,7 +27,7 @@ function initializeUserMap() {
     zoom: 2,
     disableDefaultUI: true
   };
-  function placeUserMarker(position, map) {
+  function placeUserMarker(position, map, zoom_in) {
     if(markers.length>0){
       for(i=0;i<markers.length;i++){
         markers[i].setMap(null);
@@ -42,6 +42,10 @@ function initializeUserMap() {
     });
     markers.push(marker);
     map.panTo(position);
+    map.setCenter(position);
+    if(zoom_in){
+      map.setZoom(10);
+    }
     setLatLngUser(position);
   }
   var placeUserMap = new google.maps.Map(document.getElementById('placeUserLocMap'),
@@ -59,8 +63,8 @@ function initializeUserMap() {
     var lat = position.coords.latitude;
     var lng = position.coords.longitude;
     var pos = new google.maps.LatLng(lat, lng);
-    placeUserMarker(pos,placeUserMap);
-    placeUserMap.setCenter(new google.maps.LatLng(lat, lng));
+    placeUserMarker(pos,placeUserMap, true);
+    //placeUserMap.setCenter(new google.maps.LatLng(lat, lng));
   }
 
   $('#setCurrentLocationUser').click(function(){
@@ -68,7 +72,7 @@ function initializeUserMap() {
   })
 
   google.maps.event.addListener(placeUserMap, 'click', function(e) {
-    placeUserMarker(e.latLng, placeUserMap);
+    placeUserMarker(e.latLng, placeUserMap, false);
   });
 }
 

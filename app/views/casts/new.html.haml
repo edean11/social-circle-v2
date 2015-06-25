@@ -30,7 +30,7 @@
     function populateTimeOffset(lat,lon){
       var url = "https://maps.googleapis.com/maps/api/timezone/json?location="+lat+","+lon+"&timestamp=#{Time.now.to_i}&key=#{ENV['GMAPS_ACCESS_KEY']}"
       $.get(url,function(data){
-        $('#cast_time_offset').val(data.rawOffset*(1/3600));
+        $('#cast_time_offset').val((data.rawOffset+data.dstOffset)*(1/3600));
       })
     }
 
@@ -95,6 +95,7 @@
       var pos = new google.maps.LatLng(lat, lng);
       placeMarker(pos,placeMap);
       placeMap.setCenter(new google.maps.LatLng(lat, lng));
+      placeMap.setZoom(10);
     }
 
     $('#setCurrentLocation').click(function(){
