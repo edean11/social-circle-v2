@@ -62,7 +62,9 @@ class CastsController < ApplicationController
   protected
 
   def cast_params
+    test = Time.parse(params[:cast][:expiration].to_s+" "+params[:cast][:time_offset])
     params[:cast][:expiration] = Time.parse(params[:cast][:expiration].to_s+" "+params[:cast][:time_offset]).utc
+    binding.pry
     params.require(:cast).permit(:title, :content, :expiration, :lat, :lon, :group_ids, :time_offset)
   end
 end

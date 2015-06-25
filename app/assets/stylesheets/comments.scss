@@ -4,7 +4,8 @@
 
 .commentArea{
     overflow: auto;
-    height: 590px;
+    min-height: 150px;
+    max-height: 600px;
 }
 
 .commentsContainer {
@@ -132,6 +133,10 @@
         .castCommentChildProfileContainer{
             float: right;
         }
+    }
+
+    &:last-child{
+        margin-bottom: 100px;
     }
 
     img {

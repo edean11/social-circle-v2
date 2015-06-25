@@ -1,5 +1,15 @@
 
 
+@media (min-width: 1171px) {
+    .sidebarContainer{
+        width: 40%;
+        display: inline-block;
+        float: right;
+        margin-right: 25px;
+    }
+
+}
+
 @media (max-width: 1170px) {
     //Main Page
     .sidebarContainer{
@@ -127,6 +137,13 @@
     }
 }
 
+@media (max-width: 567px) {
+    //close comments fix
+    #closeComments{
+        top: 50px;
+    }
+}
+
 @media (max-width: 480px) {
     //Main Page
     .sidebarContainer{
@@ -166,6 +183,10 @@
             width: 75px;
         }
     }
+    //close comments fix
+    #closeComments{
+        top: -40px;
+    }
 
     //Sign Up / Edit Profile
     .signUpContainer{
@@ -183,5 +204,16 @@
         .btn{
             left: 35%;
         }
+    }
+
+    .commentInputContainer{
+        width: 90%;
+    }
+}
+
+@media (max-width: 407px){
+    //close comments fix
+    #closeComments{
+        top: 40px;
     }
 }
