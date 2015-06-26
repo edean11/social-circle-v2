@@ -1,4 +1,33 @@
+@media (min-width: 1300px){
+    #map{
+        width: 900px;
+        height: 900px
+    }
 
+    #subscriptionIconLink {
+        margin-left: 850px;
+    }
+
+    #groupIconLink {
+        margin-top: 800px;
+    }
+
+    #myLocationButton {
+        margin-left: 850px;
+        margin-top: 800px;
+    }
+
+    .groupsContainer{
+        height: 800px;
+        .groupContainer{
+            width: 175px;
+            height: 175px;
+            img.groupContainerAvatar{
+                width: 175px;
+            }
+        }
+    }
+}
 
 @media (min-width: 1171px) {
     .sidebarContainer{

@@ -18,5 +18,3 @@ config/database.yml
 /config/application.yml
 
 /public/uploads
-
-/db/seed_images

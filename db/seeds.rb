@@ -1,9 +1,12 @@
 
 avatar_paths = [Rails.root+'db/seed_images/beck.jpg',Rails.root+'db/seed_images/grunt_logo.png',Rails.root+'db/seed_images/JavaScript-logo.png',
-                Rails.root+'db/seed_images/jquery-logo.jpg', Rails.root+'db/seed_images/Microsoft_SQL_Server_Logo.png',
-                Rails.root+'db/seed_images/nodejs-green.png',Rails.root+'db/seed_images/recordcollection.jpg',Rails.root+'db/seed_images/RSS.png',
-                Rails.root+'db/seed_images/Ruby_logo.png',Rails.root+'db/seed_images/Ruby_on_Rails.png',Rails.root+'db/seed_images/SQLite.png',
-                Rails.root+'db/seed_images/stars.jpeg',Rails.root+'db/seed_images/Yard.jpg']
+                Rails.root+'db/seed_images/Microsoft_SQL_Server_Logo.png',Rails.root+'db/seed_images/RSS.png',
+                Rails.root+'db/seed_images/Ruby_logo.png',Rails.root+'db/seed_images/Ruby_on_Rails.png',Rails.root+'db/seed_images/Yard.jpg']
+group_picture_paths = [Rails.root+'db/seed_images/beer.jpg',Rails.root+'db/seed_images/bookworm.jpg',
+                Rails.root+'db/seed_images/coffee.jpg',Rails.root+'db/seed_images/Frisbee.jpg',
+                Rails.root+'db/seed_images/guitar.jpg',Rails.root+'db/seed_images/kayak.jpg',
+                Rails.root+'db/seed_images/mountain.jpg',Rails.root+'db/seed_images/recordcollection.jpg',
+                Rails.root+'db/seed_images/stars.jpeg']
 
 # USERS
 users = []
@@ -14,8 +17,8 @@ end
 
 # GROUPS
 groups = []
-30.times do |n|
-    group = Fabricate(:group, picture: File.open(avatar_paths.sample(1)[0]))
+15.times do |n|
+    group = Fabricate(:group, picture: File.open(group_picture_paths.sample(1)[0]))
     groups << group
 end
 
