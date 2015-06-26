@@ -20,6 +20,7 @@
                 %option Title
                 %option Content
                 %option User
+                %option Place
             %input.searchInput
             %button.submitSearch{:type => "button"} Submit
 
@@ -321,16 +322,41 @@
     //////////////// SEARCH /////////////////////
     /////////////////////////////////////////////
 
+    var service;
+
+    function searchPlace(val){
+        var loc = mapArr[0].getCenter();
+        var request = {
+            location: loc,
+            radius: '500',
+            query: val
+        };
+        service = new google.maps.places.PlacesService(mapArr[0]);
+        service.textSearch(request, callback);
+
+        function callback(results,status){
+            console.log(results,status);
+            if (status == google.maps.places.PlacesServiceStatus.OK) {
+                mapArr[0].setCenter(results[0].geometry.location);
+                mapArr[0].setZoom(15);
+            }
+        }
+    }
+
     function searchCasts(){
         var selectedType = $('#searchType option:selected').text();
         var searchVal = $('.searchInput').val();
-        $('#circleHeader').text(searchVal+" Casts");
+        if(selectedType!=='Place'){
+            $('#circleHeader').text(searchVal+" Casts");
+        }
         if(selectedType==='Title'){
             populateMarkers("#{root_url}/casts.json?search_title="+searchVal,mapArr[0]);
         }else if(selectedType==='Content'){
             populateMarkers("#{root_url}/casts.json?search_content="+searchVal,mapArr[0]);
         }else if(selectedType==='User'){
             populateMarkers("#{root_url}/casts.json?search_user="+searchVal,mapArr[0]);
+        }else if(selectedType==='Place'){
+            searchPlace(searchVal);
         }else{console.log('invalid search')}
     }
 
