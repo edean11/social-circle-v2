@@ -228,6 +228,7 @@
         }
         $.getJSON(path,function(data){
             if(is_parent){
+                console.log(data.expiration);
                 var elem = $('<div class="castParentComment" data-uuid="'+data.id+'">'+
                             '<i class="fa fa-times-circle-o" id="closeComments"></i>'+
                             '<img class="castCommentParentAvatar" src="'+data.user.avatar.url+'"></img>'+
@@ -235,7 +236,7 @@
                             '<p class="castCommentParentHeader">'+data.title+'</p>'+
                             '<p class="castCommentParentContent">'+data.content+'</p>'+
                             '<p class="castCommentParentUser">Owner: '+data.user.name+'</p>'+
-                            '<p class="castCommentParentExpiration">'+findDaysLeft(data.expiration)+' Days Remaining</p>'+
+                            '<abbr class="castCommentParentExpiration timeago">Expires: '+$.timeago(data.expiration)+'</abbr>'+
                         '</div>');
                 $('.castCommentsHeader').append(elem);
                 addCloseCommentsListener();
@@ -386,7 +387,7 @@
         var lng = position.coords.longitude;
         var pos = new google.maps.LatLng(lat, lng);
         mapArr[0].setCenter(new google.maps.LatLng(lat, lng));
-        mapArr[0].setZoom(10);
+        mapArr[0].setZoom(16);
     }
 
     function getLocation() {
@@ -408,6 +409,7 @@
       var userLat = "#{current_user.home_lat}"
       var userLon = "#{current_user.home_lon}"
       //initialize timeago
+      $.timeago.settings.allowFuture = true;
       $("abbr.timeago").timeago();
       var mapOptions = {
         center: { lat: parseFloat(userLat), lng: parseFloat(userLon)},

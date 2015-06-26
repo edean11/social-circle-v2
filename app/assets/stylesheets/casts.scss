@@ -60,6 +60,7 @@ input.newCastGroups {
         width: 60%;
         height: 380px;
         float: right;
+        overflow: auto;
     }
 
     .newCastAttrHeader, label.check_boxes, .newCastLocationHeader  {

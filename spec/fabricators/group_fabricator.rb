@@ -1,4 +1,5 @@
 Fabricator(:group) do
-  name   { Faker::Name.name }
-  description  { "Fake description for group" }
+  name   { Faker::Hacker.adjective+" "+Faker::Hacker.adjective+" "+Faker::Hacker.noun }
+  description  { Faker::Lorem.words(4).join(" ") }
+  picture { Faker::Avatar.image }
 end
