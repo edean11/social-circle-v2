@@ -101,7 +101,6 @@
     function findDaysLeft(expiration){
         var now = new Date();
         var exp = Date.parse(expiration);
-        console.log(now.toString(),expiration,exp);
         var daysleft = parseFloat(((exp - now)/1000)*(1/86400)).toFixed(3);
         return daysleft;
     }
@@ -335,7 +334,6 @@
         service.textSearch(request, callback);
 
         function callback(results,status){
-            console.log(results,status);
             if (status == google.maps.places.PlacesServiceStatus.OK) {
                 mapArr[0].setCenter(results[0].geometry.location);
                 mapArr[0].setZoom(18);
