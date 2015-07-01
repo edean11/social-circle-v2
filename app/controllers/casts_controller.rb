@@ -9,11 +9,11 @@ class CastsController < ApplicationController
       @group = Group.find(params[:group_id])
       @casts = @group.casts
     elsif params[:search_title]
-      @casts = Cast.where('title LIKE ?', params[:search_title])
+      @casts = Cast.where('title LIKE ?', "%#{params[:search_title]}%")
     elsif params[:search_content]
-      @casts = Cast.where('content LIKE ?', params[:search_content])
+      @casts = Cast.where('content LIKE ?', "%#{params[:search_content]}%")
     elsif params[:search_user]
-      @id= User.where('name LIKE ?', params[:search_user]).pluck(:id)
+      @id= User.where('name LIKE ?', "%#{params[:search_user]}%").pluck(:id)
       @casts = Cast.where(user_id: @id[0])
     else
       @casts = Cast.all
