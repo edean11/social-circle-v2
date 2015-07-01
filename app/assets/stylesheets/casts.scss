@@ -106,6 +106,31 @@ input.newCastGroups {
     .newCastLocationContainer {
         text-align: center;
 
+        .searchPlaceCastContainer{
+            position: absolute;
+            z-index: 100;
+            margin: 5.5% 0;
+            left: 50%;
+            margin-left: -12.5%;
+            background-color: white;
+            border: 1px solid black;
+            border-radius: 5px;
+            padding: 10px;
+            width: 300px;
+            text-align: center;
+            button{
+                background-color: lightgrey;
+                color: green;
+                padding: 10px;
+                border: 1px solid black;
+                border-radius: 5px;
+                &:hover {
+                    background-color: lighten(limegreen,20%);
+                    color: black;
+                }
+            }
+        }
+
         #setCurrentLocation {
             position: absolute;
             z-index: 100;

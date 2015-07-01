@@ -15,6 +15,9 @@
       = f.button :submit, "Cast Message"
     - else
       .newCastLocationContainer
+        .searchPlaceCastContainer
+          %input.searchPlaceCastInput
+          %button#searchPlaceCast{:type => "button"} Search
         %p.newCastLocationHeader Location
         %p Choose a Location for this message by clicking somewhere on the map below or clicking 'Set Current Location'
         #placeCastMap
@@ -100,6 +103,30 @@
 
     $('#setCurrentLocation').click(function(){
       getLocation();
+    })
+
+    //Search Location
+    function searchCastPlace(val){
+        var loc = placeMap.getCenter();
+        var request = {
+            location: loc,
+            radius: '500',
+            query: val
+        };
+        service = new google.maps.places.PlacesService(placeMap);
+        service.textSearch(request, callback);
+
+        function callback(results,status){
+            if (status == google.maps.places.PlacesServiceStatus.OK) {
+                placeMap.setCenter(results[0].geometry.location);
+                placeMap.setZoom(18);
+            }
+        }
+    }
+
+    $('#searchPlaceCast').click(function(){
+      var searchVal = $('.searchPlaceCastInput').val();
+      searchCastPlace(searchVal)
     })
 
     google.maps.event.addListener(placeMap, 'click', function(e) {
