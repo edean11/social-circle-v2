@@ -17,7 +17,6 @@ config/application.yml
 
 # Ignore application configuration
 /config/application.yml
-/config/secrets.yml
 /config/database.yml
 
 /public/uploads
