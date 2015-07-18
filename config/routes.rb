@@ -1,9 +1,11 @@
 Rails.application.routes.draw do
 
-  root 'user_sessions#new'
+  devise_for :users, controllers: { sessions: "users/sessions", registrations: "users/registrations" }
+  root 'home#index'
 
-  resource :user_session, only: [:new, :create, :destroy]
-  resources :users, only: [:new, :create, :show, :edit, :update] do
+  # resource :user_session, only: [:new, :create, :destroy]
+  # , only: [:new, :create, :show, :edit, :update]
+  resources :users, only: [:show] do
     resources :casts, :only => :index, format: "json"
     resources :groups, :only => :index, format: "json"
     resources :comments, :only => :index, format: "json"

@@ -1,0 +1,22 @@
+%p.signUpHeader Edit Profile Biatch
+
+.signUpContainer
+    = simple_form_for @user, url: user_registration_path, method: :put do |f|
+        = devise_error_messages!
+        .signUpLeft
+            = f.input :name
+            = f.input :email
+            = f.input :current_password
+            = f.input :password
+            = f.input :password_confirmation
+            = f.button :submit, "Save Changes"
+        .signUpRight
+            %p.avatar-label Avatar
+            = f.file_field :avatar, label: "Upload Your User Avatar"
+            = f.input :home_lat, :as => :hidden
+            = f.input :home_lon, :as => :hidden
+            .newUserLocationContainer
+                %p.newUserLocationHeader Location
+                %p.newUserLocCaption Choose a Default Location for this user by clicking somewhere on the map below or clicking 'Set Current Location'
+                #placeUserLocMap
+                %button#setCurrentLocationUser{:type => "button"} Set Current Location

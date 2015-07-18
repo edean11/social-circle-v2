@@ -1,0 +1,10 @@
+%p.signInHeader Sign In Biatch
+
+.signInContainer
+    = simple_form_for @user, url: user_session_path do |f|
+        = devise_error_messages!
+        = f.input :name
+        = f.input :password
+        = f.button :submit, "Submit"
+
+    %p.nav-link= link_to "Don't Have a User Name Yet? Sign Up!", new_user_registration_path
