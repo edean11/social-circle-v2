@@ -15,4 +15,21 @@ class User < ActiveRecord::Base
   validates :email, format: { with: /.+@.+\..+/, message: "must be an email address" }, uniqueness: true
   validates :password, confirmation: true, length: {minimum: 5, maximum: 120}, presence: { on: :create }
 
+  before_save :ensure_authentication_token
+
+  def ensure_authentication_token
+    if authentication_token.blank?
+      self.authentication_token = generate_authentication_token
+    end
+  end
+
+  private
+
+  def generate_authentication_token
+    loop do
+      token = Devise.friendly_token
+      break token unless User.where(authentication_token: token).first
+    end
+  end
+
 end
