@@ -87,7 +87,8 @@
     text-align: center;
     padding: 10px;
 
-    .user_name,.user_password,.user_password_confirmation,.user_email{
+    .user_name,.user_password,.user_password_confirmation,.user_email,
+    .user_current_password{
         margin: 20px;
         label {
             margin-right: 10px;
