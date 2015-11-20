@@ -228,7 +228,6 @@
         }
         $.getJSON(path,function(data){
             if(is_parent){
-                console.log(data.expiration);
                 var elem = $('<div class="castParentComment" data-uuid="'+data.id+'">'+
                             '<i class="fa fa-times-circle-o" id="closeComments"></i>'+
                             '<img class="castCommentParentAvatar" src="'+data.user.avatar.url+'"></img>'+

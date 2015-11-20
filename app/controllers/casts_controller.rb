@@ -64,7 +64,7 @@ class CastsController < ApplicationController
   def cast_params
     zone = params[:cast][:time_offset]
     dt = params[:cast][:expiration]
-    full_date = dt+" "+zone
+    full_date = "#{dt} #{zone}".strip
     d = DateTime.strptime(full_date, '%Y/%m/%d %H:%M %z')
     params[:cast][:expiration] = d
     params.require(:cast).permit(:title, :content, :expiration, :lat, :lon, :group_ids, :time_offset)
