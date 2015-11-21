@@ -50,8 +50,8 @@
 
     //set hidden field values for rails
     function setLatLng(position){
-      $('#cast_lat').val(position.A);
-      $('#cast_lon').val(position.F);
+      $('#cast_lat').val(position.lat());
+      $('#cast_lon').val(position.lng());
     }
 
     var userLat = parseFloat("#{current_user.home_lat}")
@@ -64,7 +64,7 @@
     };
     function placeMarker(position, map) {
       $('#setChosenLocation').removeClass('hidden');
-      populateTimeOffset(position.A,position.F);
+      populateTimeOffset(position.lat(),position.lng());
       if(markers.length>0){
         for(i=0;i<markers.length;i++){
           markers[i].setMap(null);

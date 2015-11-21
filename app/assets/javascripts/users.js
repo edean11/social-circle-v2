@@ -17,8 +17,8 @@ function initializeUserMap() {
 
   //set hidden field values for rails
   function setLatLngUser(position){
-    $('#user_home_lat').val(position.A);
-    $('#user_home_lon').val(position.F);
+    $('#user_home_lat').val(position.lat());
+    $('#user_home_lon').val(position.lng());
   }
 
   //place cast map
