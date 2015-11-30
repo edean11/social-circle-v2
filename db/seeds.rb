@@ -65,16 +65,22 @@ eventbrite_picture_path = Rails.root+'db/seed_images/eventbrite.png'
 
 # EVENTBRITE SEEDS
 eventbrite_casts = []
-eventbrite_url = "https://www.eventbriteapi.com/v3/events/search/?popular=true&location.latitude=36.162664&location.longitude=-86.781602&expand=venue&token=#{ENV['EVENTBRITE_KEY']}"
-eventbrite_user = Fabricate(:user, name: 'Eventbrite', email: 'info@eventbrite.com', avatar: File.open(eventbrite_picture_path))
-eventbrite_group = Fabricate(:group, name: 'Eventbrite', description: 'Eventbrite Events', picture: File.open(eventbrite_picture_path))
-eventbrite_response = JSON.parse(HTTP[:accept => "application/json"].get(eventbrite_url).to_s)
-eventbrite_response.fetch("events").each do |event|
-  if event["venue"] && event["venue"]["address"]
-    eventbrite_cast = Fabricate(:cast, user: eventbrite_user, title: event["name"]["text"], content: event["description"]["text"],
-                    expiration: DateTime.strptime(event["end"]["local"].to_s+'-0600').to_s, time_offset: -6,
-                    lat: event["venue"]["address"]["latitude"], lon: event["venue"]["address"]["longitude"])
-    castgroup = Fabricate(:castgroup, group: eventbrite_group, cast: eventbrite_cast)
-    eventbrite_casts << eventbrite_cast
+eventbrite_lat = ENV['lat']
+eventbrite_lon = ENV['lon']
+if eventbrite_lat && eventbrite_lon
+  eventbrite_tz_response = JSON.parse(HTTP[:accept => "application/json"].get("https://maps.googleapis.com/maps/api/timezone/json?location=#{eventbrite_lat},#{eventbrite_lon}&timestamp=#{Time.now.to_i}&key=#{ENV['GMAPS_ACCESS_KEY']}").to_s)
+  eventbrite_tz = (eventbrite_tz_response["rawOffset"].to_i + eventbrite_tz_response["dstOffset"].to_i)/3600
+  eventbrite_url = "https://www.eventbriteapi.com/v3/events/search/?popular=true&location.latitude=#{eventbrite_lat}&location.longitude=#{eventbrite_lon}&expand=venue&token=#{ENV['EVENTBRITE_KEY']}"
+  eventbrite_user = Fabricate(:user, name: 'Eventbrite14', email: 'info14@eventbrite.com', avatar: File.open(eventbrite_picture_path))
+  eventbrite_group = Fabricate(:group, name: 'Eventbrite14', description: 'Eventbrite Events', picture: File.open(eventbrite_picture_path))
+  eventbrite_response = JSON.parse(HTTP[:accept => "application/json"].get(eventbrite_url).to_s)
+  eventbrite_response.fetch("events").each do |event|
+    if event["venue"] && event["venue"]["address"]
+      eventbrite_cast = Fabricate(:cast, user: eventbrite_user, title: event["name"]["text"], content: event["description"]["text"],
+                      expiration: DateTime.strptime(event['end']['local'].to_s + eventbrite_tz.to_s).to_s, time_offset: eventbrite_tz,
+                      lat: event["venue"]["address"]["latitude"], lon: event["venue"]["address"]["longitude"])
+      castgroup = Fabricate(:castgroup, group: eventbrite_group, cast: eventbrite_cast)
+      eventbrite_casts << eventbrite_cast
+    end
   end
 end
