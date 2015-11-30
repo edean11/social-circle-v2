@@ -1,5 +1,6 @@
 
 require "http"
+require "fabrication"
 
 avatar_paths = [Rails.root+'db/seed_images/beck.jpg',Rails.root+'db/seed_images/grunt_logo.png',Rails.root+'db/seed_images/JavaScript-logo.png',
                 Rails.root+'db/seed_images/Microsoft_SQL_Server_Logo.png',Rails.root+'db/seed_images/RSS.png',

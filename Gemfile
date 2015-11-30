@@ -24,12 +24,12 @@ gem 'carrierwave'
 gem 'mini_magick'
 gem 'rmagick'
 gem 'http'
+gem 'fabrication'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
   gem 'faker'
-  gem 'fabrication'
   gem 'rspec-rails'
   gem 'pry'
 
