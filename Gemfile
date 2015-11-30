@@ -25,11 +25,11 @@ gem 'mini_magick'
 gem 'rmagick'
 gem 'http'
 gem 'fabrication'
+gem 'faker'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
-  gem 'faker'
   gem 'rspec-rails'
   gem 'pry'
 
