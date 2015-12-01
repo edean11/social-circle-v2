@@ -11,7 +11,6 @@ class Group < ActiveRecord::Base
   def self.unsubscribed_groups(id)
     groups = Group.joins(:subscriptions)
     output = groups.where.not(subscriptions: { user_id: id })
-    binding.pry
     return output
   end
 end
