@@ -11,7 +11,6 @@ require "faker"
 #                 Rails.root+'db/seed_images/guitar.jpg',Rails.root+'db/seed_images/kayak.jpg',
 #                 Rails.root+'db/seed_images/mountain.jpg',Rails.root+'db/seed_images/recordcollection.jpg',
 #                 Rails.root+'db/seed_images/stars.jpeg']
-eventbrite_picture_path = Rails.root+'db/seed_images/eventbrite.png'
 
 # # USERS
 # users = []
@@ -64,6 +63,29 @@ eventbrite_picture_path = Rails.root+'db/seed_images/eventbrite.png'
 # end
 
 # EVENTBRITE SEEDS
+
+eventbrite_picture_path = Rails.root+'db/seed_images/eventbrite.png'
+
+def self.find_or_create_eventbrite_user
+  eventbrite_user = nil
+  eventbrite_picture_path = Rails.root+'db/seed_images/eventbrite.png'
+  if eventbrite_user = User.find_by(email: 'info@eventbrite.com')
+  else
+    eventbrite_user = Fabricate(:user, name: 'Eventbrite', email: 'info@eventbrite.com', avatar: File.open(eventbrite_picture_path))
+  end
+  eventbrite_user
+end
+
+def self.find_or_create_eventbrite_group
+  evenbrite_group = nil
+  eventbrite_picture_path = Rails.root+'db/seed_images/eventbrite.png'
+  if eventbrite_group = Group.find_by(name: 'Eventbrite')
+  else
+    eventbrite_group = Fabricate(:group, name: 'Eventbrite', description: 'Eventbrite Events', picture: File.open(eventbrite_picture_path))
+  end
+  eventbrite_group
+end
+
 eventbrite_casts = []
 eventbrite_lat = ENV['lat']
 eventbrite_lon = ENV['lon']
@@ -71,8 +93,8 @@ if eventbrite_lat && eventbrite_lon
   eventbrite_tz_response = JSON.parse(HTTP[:accept => "application/json"].get("https://maps.googleapis.com/maps/api/timezone/json?location=#{eventbrite_lat},#{eventbrite_lon}&timestamp=#{Time.now.to_i}&key=#{ENV['GMAPS_ACCESS_KEY']}").to_s)
   eventbrite_tz = (eventbrite_tz_response["rawOffset"].to_i + eventbrite_tz_response["dstOffset"].to_i)/3600
   eventbrite_url = "https://www.eventbriteapi.com/v3/events/search/?popular=true&location.latitude=#{eventbrite_lat}&location.longitude=#{eventbrite_lon}&expand=venue&token=#{ENV['EVENTBRITE_KEY']}"
-  eventbrite_user = Fabricate(:user, name: 'Eventbrite14', email: 'info14@eventbrite.com', avatar: File.open(eventbrite_picture_path))
-  eventbrite_group = Fabricate(:group, name: 'Eventbrite14', description: 'Eventbrite Events', picture: File.open(eventbrite_picture_path))
+  eventbrite_user = find_or_create_eventbrite_user
+  eventbrite_group = find_or_create_eventbrite_group
   eventbrite_response = JSON.parse(HTTP[:accept => "application/json"].get(eventbrite_url).to_s)
   eventbrite_response.fetch("events").each do |event|
     if event["venue"] && event["venue"]["address"]
