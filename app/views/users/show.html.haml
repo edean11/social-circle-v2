@@ -370,7 +370,9 @@
 
     function populateSubscribedGroups(){
         var myCastsElem = $('<div class="groupContainer" data-uuid="'+userId+'"><img class="groupContainerAvatar" src="#{@user.avatar.url}"></img><p class="groupName">'+"#{@user.name}"+'</p></div>')
+        var allCastsElem = $('<div class="groupContainer"><img class="groupContainerAvatar allCastsGroup" src="https://s3.amazonaws.com/social-circle-development/thesocialcircle.png"></img><p class="groupName">All Casts</p></div>')
         $('.groupsContainer').append(myCastsElem);
+        $('.groupsContainer').append(allCastsElem);
         $.getJSON("#{user_groups_path(@user)}",function(data) {
             //and if statement for adding 'no comments' elem
             $.each(data,function(index,group){
@@ -393,13 +395,16 @@
 
     function handleGroupClick(e){
         var uuid = $(e.target).attr('data-uuid') || $(e.target).parent().attr('data-uuid');
-        if(uuid){
+        var groupName = $(e.target).text() || $(e.target).parent().text();
+        if(uuid || groupName === 'All Casts'){
             removeGroupHighlights();
             highlightGroup(e);
-            var groupName = $(e.target).text() || $(e.target).parent().text();
             if(groupName===userName){
                 $('#circleHeader').text(groupName+"'s Circle");
                 populateMarkers("#{root_url}/users/"+uuid+"/casts.json",mapArr[0]);
+            }else if(groupName==='All Casts'){
+                $('#circleHeader').text(groupName);
+                populateMarkers("#{root_url}/casts.json",mapArr[0]);
             }else{
                 $('#circleHeader').text(groupName+" Circle");
                 populateMarkers("#{root_url}/groups/"+uuid+"/casts.json",mapArr[0]);
